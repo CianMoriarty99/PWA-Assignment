@@ -7,11 +7,27 @@
 <body>
     <h1> My Offline Stories </h1>
     <div id="stories"></div>
-    <label>
-        New Story:
-        <input id="storyText" type="text">
-    </label>
+    <p> New Story </p>
+    <form id="newStoryForm">
+        <label>
+            Author:
+            <input id="storyAuthor" type="text"/>
+        </label>
+        <br>
+        <label>
+            Story:
+            <input id="storyText" type="text"/>
+        </label>
+        <br>
+        <label>
+            Image:
+            <input id="storyImage" multiple type="file" accept="image/*"/>
+        </label>
+        <div id="storyImagesToUpload"></div>
+    </form>
+
     <button id="addButton"> Add Story </button>
+    <p id="warningMessage"> 3 images max <p></p>
 </body>
 <script src="/scripts/database.js" ></script>
 <script src="/scripts/offline.js" ></script>
