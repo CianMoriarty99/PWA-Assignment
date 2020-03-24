@@ -22,7 +22,7 @@ function generateStoryElement(story) {
     const images = document.createElement("span");
     for (let i = 0; i < story.story.images.length; i++) {
         const img = document.createElement("img");
-        img.src = story.story.images[i];
+        img.src = URL.createObjectURL(story.story.images[i]);
         images.appendChild(img);
     }
     const date = document.createElement("p");
@@ -66,7 +66,7 @@ function addElement() {
 
     if (/^\s*$/.test(author) || /^\s*$/.test(storyText)) return;
 
-    const images = Array.from(storyImageUpload.files).map(URL.createObjectURL);
+    const images = Array.from(storyImageUpload.files);
     const date = new Date().toISOString().slice(0, 10);
     const time = (new Date()).toLocaleTimeString();
 
@@ -80,9 +80,11 @@ function addElement() {
         }
     };
 
+    // addToUploadList(newStory);
+
     stories.push(newStory);
     displayStories();
-    saveStories(stories);
+    saveStory(newStory);
     storyTextBox.value = '';
     storyAuthor.value = '';
     storyImageUpload.value = '';
@@ -107,6 +109,9 @@ document.getElementById('storyImage').addEventListener('change', event => {
 
 document.getElementById('addButton').addEventListener('click', () => addElement());
 
-stories = loadStories();
-displayStories();
+initDb();
+loadStories().then(res => {
+    stories = res;
+    displayStories();
+});
 
