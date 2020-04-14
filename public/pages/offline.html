@@ -8,6 +8,8 @@
     <h1> My Offline Stories </h1>
     <div id="stories"></div>
     <p> New Story </p>
+    <div id='errors' ></div>
+    <div id='successes'></div>
     <form id="newStoryForm">
         <label>
             Author:
@@ -28,7 +30,13 @@
 
     <button id="addButton"> Add Story </button>
     <p id="warningMessage"> 3 images max <p></p>
+
+    <button id='deleteAllStories'>Delete indexedb stories</button>
+    <button id='loadOnline'>allStories</button>
+    <div id='onlineStories'></div>
+
 </body>
+<script src="/scripts/jquery-3.4.1.min.js"></script>
 <script src="/scripts/idb.js" ></script>
 <script src="/scripts/database.js" ></script>
 <script src="/scripts/offline.js" ></script>

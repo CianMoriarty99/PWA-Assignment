@@ -1,6 +1,7 @@
 const cache_name = 'pwa_stories';
 
 const cache_urls = new Set([
+    "/scripts/jquery-3.4.1.min.js",
     '/scripts/idb.js',
     '/scripts/offline.js',
     '/scripts/database.js',
@@ -67,4 +68,5 @@ self.addEventListener('fetch', event => {
         );
     }
 });
+
 
