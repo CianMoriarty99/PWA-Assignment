@@ -46,6 +46,11 @@ function normalizePort(val) {
   return false;
 }
 
+let socket_module = require('../socket.io/socket-io');
+let io = socket_module.io;
+
+io.attach(server);
+
 /**
  * Event listener for HTTP server "error" event.
  */

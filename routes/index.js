@@ -1,6 +1,8 @@
 const express = require('express');
 const multer = require('multer');
+const socket = require("../socket.io/socket-io");
 const fs = require('fs');
+
 // const upload = multer({ storage: memory });
 
 
@@ -49,7 +51,15 @@ router.post('/uploadStory', upload.array('images', 3), (req, res) => {
         }
     };
     allStories.push(newStory);
+
+    try {
+        socket.sendNewPostAlert();
+    } catch (e){
+        console.log("Socket trouble: " + e.message);
+    }
+
     res.json({id: allStories.length, ...newStory});
+
 });
 
 module.exports = router;

@@ -13,6 +13,13 @@ const onlineStories = document.getElementById('onlineStories');
 
 let stories = [];
 
+let socket = io();
+
+socket.on("NewStoryPost", function(){
+    console.log("New story posted; Getting online stories");
+    getOnlineStories();
+});
+
 (async () => {
     await initDbPromise();
     const toUpload = await getToUploadStories();
@@ -179,6 +186,10 @@ document.getElementById('addButton').addEventListener('click', () => addElement(
 document.getElementById('deleteAllStories').addEventListener('click', () => deleteAllStories());
 
 document.getElementById('loadOnline').addEventListener('click', () => {
+        getOnlineStories();
+});
+
+function getOnlineStories(){
     fetch('stories')
         .then(status)
         .then(response => response.json())
@@ -186,10 +197,10 @@ document.getElementById('loadOnline').addEventListener('click', () => {
             console.log(response);
             onlineStories.innerHTML = JSON.stringify(response);
         }).catch(err => {
-            console.log(err);
-            onlineStories.innerHTML = 'oh no!';
-        });
-});
+        console.log(err);
+        onlineStories.innerHTML = 'oh no!';
+    });
+}
 
 function sortStories(){
     stories.sort((a, b) => {
