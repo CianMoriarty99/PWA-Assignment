@@ -10,8 +10,18 @@ const cache_urls = new Set([
 ]);
 
 const cache_first = {
-    '/': '/pages/offline.html',
+    '/': '/pages/allStories.html',
+    '/me': '/pages/myStories.html',
+    '/upload': '/pages/uploadStory.html'
 };
+
+const createDB = () => {
+    idb.open('images', 1, (upgradeDB) => {
+        upgradeDB.createObjectStore('images', {
+            keyPath: 'id'
+        });
+    });
+}
 
 self.addEventListener('install', event => {
     console.log('installing service worker');
@@ -22,14 +32,6 @@ self.addEventListener('install', event => {
         })
     );
 });
-
-function createDB() {
-    idb.open('images', 1, function(upgradeDB) {
-        upgradeDB.createObjectStore('images', {
-            keyPath: 'id'
-        });
-    });
-}
 
 self.addEventListener('activate', event => {
     console.log('removing old cache...');
@@ -51,13 +53,13 @@ self.addEventListener('fetch', event => {
     console.log(dest);
     if (dest in cache_first) {
         event.respondWith(
-            caches.match(cache_first[dest])
-                .catch(() => {
+            caches.match(cache_first[dest]).then(function(response) {
                     console.log(`couldnt find ${dest} in cache, calling network...`);
-                    return fetch(event.request);
-                })
-        );
+                    return response || fetch(cache_first[dest]);
+            })
+        )
     }
+    
     else if (cache_urls.has(dest)) {
         event.respondWith(
             caches.match(dest)

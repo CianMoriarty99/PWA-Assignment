@@ -1,4 +1,4 @@
-var User = require('../models/users');
+const User = require('../models/users');
 exports.getUsername = function (req, res) {
     var userData = req.body;
     if (userData == null) {

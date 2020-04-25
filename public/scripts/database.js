@@ -2,6 +2,7 @@ let dbPromise;
 
 const DB_NAME = 'stories_db';
 const STORIES_STORE = 'stories';
+const MY_STORIES_STORE = 'myStories';
 const TO_UPLOAD_STORE = 'toUpload'
 
 const initDbPromise = (resolve) => {
@@ -15,6 +16,10 @@ const initDb = () => {
             const storiesDb = upgradeDb.createObjectStore(STORIES_STORE, {keyPath: 'id', autoIncrement: true});
             storiesDb.createIndex('author', 'author', {unique: false, multiEntry: true});
         }
+        if (!upgradeDb.objectStoreNames.contains(MY_STORIES_STORE)) {
+            const storiesDb = upgradeDb.createObjectStore(MY_STORIES_STORE, { keyPath: 'id', autoIncrement: true });
+            storiesDb.createIndex('author', 'author', { unique: false, multiEntry: true });
+        }
         if (!upgradeDb.objectStoreNames.contains(TO_UPLOAD_STORE)) {
             const storiesDb = upgradeDb.createObjectStore(TO_UPLOAD_STORE, { keyPath: 'id', autoIncrement: true });
             storiesDb.createIndex('author', 'author', { unique: false, multiEntry: true });
@@ -22,7 +27,7 @@ const initDb = () => {
     })
 }
 
-const loadStories = async () => {
+const loadAllStories = async () => {
     return await dbPromise.then(async db => {
         const trans = db.transaction(STORIES_STORE, 'readonly');
         const store = trans.objectStore(STORIES_STORE);
