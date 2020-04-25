@@ -21,21 +21,22 @@ let stories = [];
             console.log(e);
             const formdata = new FormData();
             formdata.append('author', e.author);
-            formdata.append('storyText', e.story.text);
+            formdata.append('storyText', e.storyText);
             formdata.append('time', e.time);
             formdata.append('date', e.date);
-            for (let image of e.story.images) {
+            for (let image of e.storyImages) {
                 formdata.append('images', image);
             }
 
-            return fetch('/uploadStory', {
+            return fetch('/stories/upload', {
                 method: 'POST',
                 body: formdata,
             }).then(status)
                 .then(response => response.json())
                 .then(response => {
                     console.log('uploaded stored!');
-                    response.story.images = e.story.images;
+                    console.log(response);
+                    response.storyImages = e.storyImages;
                     saveStory(response);
                     successfullyUploaded(e.id);
                 }).catch(err => {
@@ -61,12 +62,12 @@ function generateStoryElement(story) {
     author.innerText = story.author;
 
     const message = document.createElement("p");
-    message.innerText = story.story.text;
+    message.innerText = story.storyText;
 
     const images = document.createElement("span");
-    for (let i = 0; i < story.story.images.length; i++) {
+    for (let i = 0; i < story.storyImages.length; i++) {
         const img = document.createElement("img");
-        img.src = URL.createObjectURL(story.story.images[i]);
+        img.src = URL.createObjectURL(story.storyImages[i]);
         images.appendChild(img);
     }
     const date = document.createElement("p");
@@ -119,10 +120,8 @@ function addElement() {
         'author': author,
         'date': date,
         'time': time,
-        'story': {
-            'text': storyText,
-            'images': images
-        }
+        'storyImages': images,
+        'storyText': storyText
     };
 
     stories.push(newStory);
@@ -142,13 +141,13 @@ function addElement() {
         formdata.append('images', image);
     }
 
-    fetch('/uploadStory', {
+    fetch('/stories/upload', {
         method: 'POST',
         body: formdata,
     }).then(status)
     .then(response => response.json())
     .then(response => {
-        response.story.images = images;
+        response.storyImages = images;
         saveStory(response);
         errors.innerHTML = '';
         successes.innerHTML = 'success!';

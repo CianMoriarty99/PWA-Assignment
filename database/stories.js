@@ -4,10 +4,10 @@ var bcrypt = require('bcryptjs');
 
 //The URL which will be queried. Run "mongod.exe" for this to connect
 
-mongoose.Promise = global.Promise;
 var mongoDB = 'mongodb://localhost:27018/stories';
 
 mongoose.Promise = global.Promise;
+
 try {
     connection = mongoose.connect(mongoDB, {
         useNewUrlParser: true,
@@ -15,9 +15,6 @@ try {
         checkServerIdentity: false,
     });
     console.log('connection to mongodb worked!');
-
-    
-
 } catch (e) {
     console.log('error in db connection: ' + e.message);
 }

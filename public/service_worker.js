@@ -10,8 +10,18 @@ const cache_urls = new Set([
 ]);
 
 const cache_first = {
-    '/': '/pages/offline.html',
+    '/': '/pages/allStories.html',
+    '/me': '/pages/myStories.html',
+    '/upload': '/pages/uploadStory.html'
 };
+
+const createDB = () => {
+    idb.open('images', 1, (upgradeDB) => {
+        upgradeDB.createObjectStore('images', {
+            keyPath: 'id'
+        });
+    });
+}
 
 self.addEventListener('install', event => {
     console.log('installing service worker');
@@ -22,14 +32,6 @@ self.addEventListener('install', event => {
         })
     );
 });
-
-function createDB() {
-    idb.open('images', 1, function(upgradeDB) {
-        upgradeDB.createObjectStore('images', {
-            keyPath: 'id'
-        });
-    });
-}
 
 self.addEventListener('activate', event => {
     console.log('removing old cache...');

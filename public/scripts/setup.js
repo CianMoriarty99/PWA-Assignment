@@ -1,6 +1,6 @@
 localStorage.clear();
 
-Promise.all(
+Promise.allSettled(
     [new Promise((resolve, reject) => {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker
@@ -10,4 +10,5 @@ Promise.all(
         };
     }),
     new Promise(initDbPromise)]
-).then(() => location.reload());
+);
+// ).then(() => location.reload());
