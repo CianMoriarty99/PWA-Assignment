@@ -1,7 +1,13 @@
 localStorage.clear();
 
-navigator.serviceWorker
-    .register('service_worker.js')
-    .then(() => console.log('Service worker registered'))
-    .then(() => location.reload());
-
+Promise.all(
+    [new Promise((resolve, reject) => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('service_worker.js')
+                .then(resolve)
+                .catch(reject);
+        };
+    }),
+    new Promise(initDbPromise)]
+).then(() => location.reload());
