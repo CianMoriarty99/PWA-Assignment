@@ -22,6 +22,26 @@ const logged_in = async (req, res, next) => {
     }
 }
 
+const optional_logged_in = async (req,res,next) => {
+    const token = req.cookies.token;
+    if (token) {
+        try {
+            const verify = jwt.verify(token, secret);
+            const username = verify.username;
+            req.username = username;
+            next();
+        }
+        catch(err) {
+            console.log('Token is invalid or expired');
+            next();
+        }
+    }
+    else {
+        console.log('user not logged in');
+        next();
+    }
+}
+
 const logged_out = (req, res, next) => {
     const token = req.cookies.token;
     if (token) {
@@ -41,3 +61,4 @@ const logged_out = (req, res, next) => {
 
 exports.logged_in = logged_in;
 exports.logged_out = logged_out
+exports.optional_logged_in = optional_logged_in

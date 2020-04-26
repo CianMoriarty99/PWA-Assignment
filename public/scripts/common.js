@@ -73,20 +73,25 @@ const generateStoryElement = (story) => {
     const date = document.createElement("p");
     date.innerText = story.date;
 
-    const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.addEventListener('click', () => {
-        stories = stories.filter(s => s !== story);
-
-        saveStories(stories);
-        displayStories();
-    });
-
     result.appendChild(author);
     result.appendChild(message);
     result.appendChild(images);
     result.appendChild(date);
-    result.appendChild(deleteButton);
+
+    if(story.deletable){
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Delete";
+        deleteButton.addEventListener('click', () => {
+            stories = stories.filter(s => s !== story);
+
+            saveStories(stories);
+            displayStories();
+        });
+        result.appendChild(deleteButton);
+    }
+
+
+
 
     return result;
 }

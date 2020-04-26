@@ -3,8 +3,13 @@ const Story = require('../models/stories');
 exports.getStories = async (req, res) => {
     try {
         const stories = await Story.find({});
-        const fixedStores = stories.map(s => s.clean());
-        res.json(fixedStores);
+        const fixedStories = stories.map(s => {
+            const result = s.clean();
+            result.deletable = (req.username && s.author == req.username)
+            return result
+        })
+        console.log(fixedStories)
+        res.json(fixedStories);
     } catch (e) {
         console.log(e);
         res.status(500).send('error ' + e);
@@ -14,7 +19,11 @@ exports.getStories = async (req, res) => {
 exports.myStories = async (req, res) => {
     try{
         const stories = await Story.find({author : req.username})
-        res.json(stories.map(s => s.clean()));
+        res.json(stories.map(s => {
+            const result = s.clean()
+            result.deletable = true
+            return result
+        }));
     } catch (e){
         console.log(e);
         res.status(500).send('error ' + e);

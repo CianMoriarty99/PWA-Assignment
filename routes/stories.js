@@ -1,11 +1,9 @@
 const express = require('express');
 const multer = require('multer');
 
-const Story = require('../models/stories');
 const storyController = require('../controllers/stories');
-const {logged_in, logged_out} = require('../utils')
+const {logged_in, optional_logged_in} = require('../utils')
 
-allStories = []
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -27,7 +25,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.get('/', storyController.getStories);
+router.get('/', optional_logged_in, storyController.getStories);
 router.get('/myStories', logged_in, storyController.myStories);
 
 router.post('/upload', logged_in, upload.array('images', 3), storyController.upload);
