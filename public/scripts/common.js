@@ -1,4 +1,7 @@
+const storiesDiv = document.getElementById('stories');
+
 const stories = [];
+
 
 (async () => {
     await initDbPromise();

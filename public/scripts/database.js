@@ -1,7 +1,7 @@
 let dbPromise;
 
 const DB_NAME = 'stories_db';
-const STORIES_STORE = 'stories';
+const ALL_STORIES_STORE = 'allStories';
 const MY_STORIES_STORE = 'myStories';
 const TO_UPLOAD_STORE = 'toUpload'
 
@@ -12,8 +12,8 @@ const initDbPromise = (resolve) => {
 
 const initDb = () => {
     dbPromise = idb.openDb(DB_NAME, 1, (upgradeDb) => {
-        if (!upgradeDb.objectStoreNames.contains(STORIES_STORE)) {
-            const storiesDb = upgradeDb.createObjectStore(STORIES_STORE, {keyPath: 'id', autoIncrement: true});
+        if (!upgradeDb.objectStoreNames.contains(ALL_STORIES_STORE)) {
+            const storiesDb = upgradeDb.createObjectStore(ALL_STORIES_STORE, {keyPath: 'id', autoIncrement: true});
             storiesDb.createIndex('author', 'author', {unique: false, multiEntry: true});
         }
         if (!upgradeDb.objectStoreNames.contains(MY_STORIES_STORE)) {
@@ -29,16 +29,16 @@ const initDb = () => {
 
 const loadAllStories = async () => {
     return await dbPromise.then(async db => {
-        const trans = db.transaction(STORIES_STORE, 'readonly');
-        const store = trans.objectStore(STORIES_STORE);
+        const trans = db.transaction(ALL_STORIES_STORE, 'readonly');
+        const store = trans.objectStore(ALL_STORIES_STORE);
         return store.getAll();
     });
 }
 
 const saveStory = async (story) => {
     return dbPromise.then(async db => {
-        const trans = db.transaction(STORIES_STORE, 'readwrite');
-        const store = trans.objectStore(STORIES_STORE);
+        const trans = db.transaction(ALL_STORIES_STORE, 'readwrite');
+        const store = trans.objectStore(ALL_STORIES_STORE);
         await store.add(story);
         return trans.complete;
     });
@@ -46,8 +46,8 @@ const saveStory = async (story) => {
 
 const deleteStory = async (id) => {
     return dbPromise.then(async db => {
-        const trans = db.transaction(STORIES_STORE, 'readwrite');
-        const store = trans.objectStore(STORIES_STORE);
+        const trans = db.transaction(ALL_STORIES_STORE, 'readwrite');
+        const store = trans.objectStore(ALL_STORIES_STORE);
         await store.delete(id);
         return trans.complete;
     });
@@ -55,8 +55,8 @@ const deleteStory = async (id) => {
 
 const deleteAllStories = () => {
     dbPromise.then(async db => {
-        const trans = db.transaction(STORIES_STORE, 'readwrite');
-        const store = trans.objectStore(STORIES_STORE);
+        const trans = db.transaction(ALL_STORIES_STORE, 'readwrite');
+        const store = trans.objectStore(ALL_STORIES_STORE);
         await store.delete();
         return trans.complete;
     });

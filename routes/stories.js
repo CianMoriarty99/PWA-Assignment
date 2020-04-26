@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 
-var Story = require('../models/stories');
+const Story = require('../models/stories');
 const storyController = require('../controllers/stories');
 const {logged_in, logged_out} = require('../utils')
 
@@ -28,8 +28,9 @@ const upload = multer({
 const router = express.Router();
 
 router.get('/', storyController.getStories);
+router.get('/myStories', logged_in, storyController.myStories);
+
 router.post('/upload', logged_in, upload.array('images', 3), storyController.upload);
 
-router.get('/myStories', logged_in, storyController.myStories);
 
 module.exports = router;
