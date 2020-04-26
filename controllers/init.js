@@ -3,12 +3,12 @@ var User = require('../models/users');
 var Story = require('../models/stories');
 
 
-exports.init= function() {
+exports.init = async () => {
     // uncomment if you need to drop the database
     //
-    // User.deleteMany({}, function(err) {
-    //    console.log('collection removed')
-    // });
+    
+    await Story.deleteMany({})
+
 
     // var user = new User({
     //     username: 'Yeet',

@@ -35,6 +35,14 @@ const loadAllStories = async () => {
     });
 }
 
+const loadMyStories = async () => {
+    return await dbPromise.then(async db => {
+        const trans = db.transaction(MY_STORIES_STORE, 'readonly');
+        const store = trans.objectStore(MY_STORIES_STORE);
+        return store.getAll();
+    });
+}
+
 const saveStory = async (story) => {
     return dbPromise.then(async db => {
         const trans = db.transaction(ALL_STORIES_STORE, 'readwrite');
@@ -57,7 +65,7 @@ const deleteAllStories = () => {
     dbPromise.then(async db => {
         const trans = db.transaction(ALL_STORIES_STORE, 'readwrite');
         const store = trans.objectStore(ALL_STORIES_STORE);
-        await store.delete();
+        await store.clear()
         return trans.complete;
     });
 }

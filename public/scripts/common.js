@@ -1,8 +1,5 @@
 const storiesDiv = document.getElementById('stories');
 
-const stories = [];
-
-
 (async () => {
     await initDbPromise();
     const toUpload = await getToUploadStories();
@@ -44,6 +41,17 @@ const status = (response) => {
     }
 }
 
+const getImages = async (story) => {
+    story.storyImages = story.storyImages.map(async s => {    
+        const url = `/images/${s}`
+        return await fetch(url)
+            .then(r => r.blob())
+    })
+    story.storyImages = await Promise.all(story.storyImages)
+    return story
+}
+
+
 const generateStoryElement = (story) => {
     const result = document.createElement("div");
     result.classList.add('story');
@@ -53,10 +61,12 @@ const generateStoryElement = (story) => {
 
     const message = document.createElement("p");
     message.innerText = story.storyText;
+    //if (story.storyImages.length) console.log(story.storyImages)
 
     const images = document.createElement("span");
     for (let i = 0; i < story.storyImages.length; i++) {
         const img = document.createElement("img");
+        console.log(story.storyImages[i])
         img.src = URL.createObjectURL(story.storyImages[i]);
         images.appendChild(img);
     }
@@ -81,7 +91,7 @@ const generateStoryElement = (story) => {
     return result;
 }
 
-function displayStories() {
+function displayStories(stories) {
     storiesDiv.style.visibility = 'hidden';
     storiesDiv.innerHTML = '';
 

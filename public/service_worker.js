@@ -15,13 +15,13 @@ const cache_first = {
     '/upload': '/pages/uploadStory.html'
 };
 
-const createDB = () => {
-    idb.open('images', 1, (upgradeDB) => {
-        upgradeDB.createObjectStore('images', {
-            keyPath: 'id'
-        });
-    });
-}
+// const createDB = () => {
+//     idb.open('images', 1, (upgradeDB) => {
+//         upgradeDB.createObjectStore('images', {
+//             keyPath: 'id'
+//         });
+//     });
+// }
 
 self.addEventListener('install', event => {
     console.log('installing service worker');
@@ -44,7 +44,7 @@ self.addEventListener('activate', event => {
            })
        )
     });
-    createDB();
+    //createDB();
 });
 
 self.addEventListener('fetch', event => {
