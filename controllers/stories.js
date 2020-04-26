@@ -11,6 +11,17 @@ exports.getStories = async (req, res) => {
     }
 }
 
+exports.myStories = async (req, res) => {
+    try{
+        const stories = await Story.find({author : req.username})
+        res.json(stories.map(s => s.clean()));
+    } catch (e){
+        console.log(e);
+        res.status(500).send('error ' + e);
+    }
+}
+
+
 exports.upload = function (req, res) {
     console.log("Inserting")
     const userStory = req.body;
@@ -21,7 +32,7 @@ exports.upload = function (req, res) {
     try {
         console.log("HI")
         const newStory = new Story({
-            author: userStory.author,
+            author: req.username,
             date: userStory.date,
             time: userStory.time,
             storyText: userStory.storyText,

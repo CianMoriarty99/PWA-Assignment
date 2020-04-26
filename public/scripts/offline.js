@@ -1,6 +1,5 @@
 const storiesDiv = document.getElementById('stories');
 const storyTextBox = document.getElementById('storyText');
-const storyAuthor = document.getElementById('storyAuthor');
 const storyImageUpload = document.getElementById('storyImage');
 const storyImageNameDisplay = document.getElementById('storyImagesToUpload');
 const addButton = document.getElementById('addButton');
@@ -20,7 +19,6 @@ let stories = [];
         toUpload.map(e => {
             console.log(e);
             const formdata = new FormData();
-            formdata.append('author', e.author);
             formdata.append('storyText', e.storyText);
             formdata.append('time', e.time);
             formdata.append('date', e.date);
@@ -107,17 +105,16 @@ function displayStories() {
 }
 
 function addElement() {
-    const author = storyAuthor.value;
+
     const storyText = storyTextBox.value;
 
-    if (/^\s*$/.test(author) || /^\s*$/.test(storyText)) return;
+
 
     const images = Array.from(storyImageUpload.files);
     const date = new Date().toISOString().slice(0, 10);
     const time = (new Date()).toLocaleTimeString();
 
     const newStory = {
-        'author': author,
         'date': date,
         'time': time,
         'storyImages': images,
@@ -128,12 +125,12 @@ function addElement() {
     displayStories();
     
     storyTextBox.value = '';
-    storyAuthor.value = '';
+
     storyImageUpload.value = '';
     storyImageNameDisplay.innerHTML = '';
 
     const formdata = new FormData();
-    formdata.append('author', author);
+
     formdata.append('storyText', storyText);
     formdata.append('time', time);
     formdata.append('date', date);

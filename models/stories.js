@@ -21,6 +21,11 @@ Story.methods.clean = function() {
 };
 
 
+
+
+
+
+
 Story.set('toObject', {getters: true, virtuals: true});
 
 
