@@ -1,4 +1,7 @@
+const fs = require('fs')
+
 const Story = require('../models/stories');
+
 
 exports.getStories = async (req, res) => {
     try {
@@ -8,7 +11,6 @@ exports.getStories = async (req, res) => {
             result.deletable = (req.username && s.author == req.username)
             return result
         })
-        console.log(fixedStories)
         res.json(fixedStories);
     } catch (e) {
         console.log(e);
@@ -30,16 +32,25 @@ exports.myStories = async (req, res) => {
     }
 }
 
+exports.delete = async (req, res) => {
+    const story = req.story
+    story.storyImages.forEach(imageName => {
+        const filepath = `./public/images/${imageName}`
+        try {
+            fs.unlinkSync(filepath)
+        } catch (e) {}
+        
+    });
+    await Story.deleteOne({_id : req.body.id})
+    res.json({message : 'success'})
+}
 
 exports.upload = function (req, res) {
-    console.log("Inserting")
     const userStory = req.body;
-    console.log(req.body)
     if (userStory == null) {
         res.status(403).send('No data sent!')
     }
     try {
-        console.log("HI")
         const newStory = new Story({
             author: req.username,
             date: userStory.date,
@@ -47,19 +58,12 @@ exports.upload = function (req, res) {
             storyText: userStory.storyText,
             storyImages: req.files.map(file => file.filename)
         })
-        
-        console.log("HO")
-        console.log('received: ' + newStory);
-
         newStory.save(function (err, results) {
             if (err) {
                 console.log(err);
                 res.status(500).send('Invalid data!');
                 return;
             }
-            
-            console.log(results._id);
-
             res.json(newStory);
         });
     } catch (e) {

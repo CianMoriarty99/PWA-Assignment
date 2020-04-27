@@ -66,7 +66,6 @@ const generateStoryElement = (story) => {
     const images = document.createElement("span");
     for (let i = 0; i < story.storyImages.length; i++) {
         const img = document.createElement("img");
-        console.log(story.storyImages[i])
         img.src = URL.createObjectURL(story.storyImages[i]);
         images.appendChild(img);
     }
@@ -82,10 +81,17 @@ const generateStoryElement = (story) => {
         const deleteButton = document.createElement("button");
         deleteButton.innerText = "Delete";
         deleteButton.addEventListener('click', () => {
-            stories = stories.filter(s => s !== story);
-
-            saveStories(stories);
-            displayStories();
+            const url = '/stories'
+            const options = {
+                method: 'DELETE',
+                headers: 
+                {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id: story.id})
+            }
+            fetch(url, options)
+                .then(console.log).catch(console.log)
         });
         result.appendChild(deleteButton);
     }

@@ -12,6 +12,7 @@ const Story = new Schema({
 
 Story.methods.clean = function() {
     return {
+        id: this.id,
         author: this.author,
         time: this.time,
         date: this.date,
@@ -22,7 +23,17 @@ Story.methods.clean = function() {
 
 
 
-
+Story.statics.exists = async id => {
+    try {
+        console.log(id)
+        const story = await storyModel.findOne({ _id : id });
+        return story || false;
+    }
+    catch (err) {
+        console.log(err);
+        return false;
+    }
+}
 
 
 

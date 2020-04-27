@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 
 const { secret } = require('./private');
 
+const Story = require('./models/stories')
+
 const logged_in = async (req, res, next) => {
     const token = req.cookies.token;
     if (token) {
@@ -59,6 +61,32 @@ const logged_out = (req, res, next) => {
     }
 }
 
+const owns_story = async (req, res, next) => {
+    console.log("owns_story")
+    const id = req.body.id
+    if (!id) {
+        res.status(403).send("No ID")
+        return
+    } 
+    try {
+        const story = await Story.exists(id)
+        if (story && story.author == req.username) {
+            req.story = story
+            next();
+        } else {
+            console.log("No Story")
+            res.status(403).send("Story doesn't exist")
+        }
+        
+    }
+    catch(e) {
+        console.log(e)
+        res.status(403).send("BAD")
+    }
+}
+
+
 exports.logged_in = logged_in;
 exports.logged_out = logged_out
 exports.optional_logged_in = optional_logged_in
+exports.owns_story = owns_story

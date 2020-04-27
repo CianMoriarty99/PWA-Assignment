@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 
 const storyController = require('../controllers/stories');
-const {logged_in, optional_logged_in} = require('../utils')
+const {logged_in, optional_logged_in, owns_story} = require('../utils')
 
 
 const storage = multer.diskStorage({
@@ -30,5 +30,6 @@ router.get('/myStories', logged_in, storyController.myStories);
 
 router.post('/upload', logged_in, upload.array('images', 3), storyController.upload);
 
+router.delete('/', logged_in, owns_story, storyController.delete)
 
 module.exports = router;

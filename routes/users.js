@@ -58,39 +58,5 @@ router.get('/all', async (req,res) => {
     res.json(await User.find({}))
 })
 
-router.post('/login', async (req, res) => { //logged_out
-    const username = req.body.username;
-    const password = req.body.password;
-    console.log(username, password)
-    const user = await User.verify(username, password);//cannot read property 'verify' of undefined
-    if (!user) {
-        console.log('no pass match');
-        res.status(401).send('no password match');
-        return;
-     }
-    const token = jwt.sign({ username }, secret, {
-         expiresIn: '1h'
-    });
-    res.cookie('token', token, { httpOnly: true })
-    res.redirect('/')
-});
-
-
-router.get('/logout', (req,res) => {
-    res.cookie('token', '', { httpOnly: true })
-    res.redirect('/')
-})
-
-
-router.get('/li', logged_in , (req, res) => {
-    res.send(req.username)
-})
-
-router.get('/lo', logged_out , (req, res) => {
-    res.send("user logged out")
-})
-
-
-
 
 module.exports = router;
