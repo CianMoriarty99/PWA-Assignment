@@ -9,14 +9,14 @@ const saltRounds = 10;
 exports.getUsername = (req, res) => {
     const userData = req.body;
     if (userData == null) {
-        res.status(403).send('No data sent!')
+        res.status(403).send('No data sent!');
     }
 }
 
 exports.login = async (req, res) => { //logged_out
     const username = req.body.username;
     const password = req.body.password;
-    console.log(username, password)
+    console.log(username, password);
     const user = await User.verify(username, password);//cannot read property 'verify' of undefined
     if (!user) {
         console.log('no pass match');

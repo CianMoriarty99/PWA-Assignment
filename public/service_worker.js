@@ -1,12 +1,12 @@
 const cache_name = 'pwa_stories';
 
 const cache_urls = new Set([
-    // "/scripts/jquery-3.4.1.min.js",
     '/scripts/idb.js',
-    // '/scripts/offline.js',
     '/scripts/database.js',
-    // '/pages/offline.html',
     '/stylesheets/style.css',
+    '/scripts/allStories.js',
+    '/scripts/myStories.js',
+    '/scripts/uploadStory.js',
 ]);
 
 const cache_first = {
@@ -14,14 +14,6 @@ const cache_first = {
     '/me': '/pages/myStories.html',
     '/upload': '/pages/uploadStory.html'
 };
-
-// const createDB = () => {
-//     idb.open('images', 1, (upgradeDB) => {
-//         upgradeDB.createObjectStore('images', {
-//             keyPath: 'id'
-//         });
-//     });
-// }
 
 self.addEventListener('install', event => {
     console.log('installing service worker');
@@ -53,7 +45,7 @@ self.addEventListener('fetch', event => {
     console.log(dest);
     if (dest in cache_first) {
         event.respondWith(
-            caches.match(cache_first[dest]).then(function(response) {
+            caches.match(cache_first[dest]).then(response => {
                     console.log(`couldnt find ${dest} in cache, calling network...`);
                     return response || fetch(cache_first[dest]);
             })

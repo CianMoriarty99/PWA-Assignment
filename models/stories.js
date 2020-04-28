@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Story = new Schema({
-    author: {type: String, required: true, max: 100},
-    date: {type: String, required: true, max: 100},
-    time: {type: String, required: true, max: 100},
+    author: { type: String, required: true, max: 100 },
+    date: { type: String, required: true, max: 100 },
+    time: { type: String, required: true, max: 100 },
     storyText: { type: String, required: true, max: 100 },
     storyImages: { type: Array, required: true }
 });
@@ -25,7 +25,7 @@ Story.methods.clean = function() {
 
 Story.statics.exists = async id => {
     try {
-        console.log(id)
+        console.log(id);
         const story = await storyModel.findOne({ _id : id });
         return story || false;
     }

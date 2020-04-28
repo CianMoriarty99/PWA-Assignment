@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 const Story = require('../models/stories');
+const socket = require("../socket.io/socket-io");
 
 
 exports.getStories = async (req, res) => {
@@ -20,7 +21,7 @@ exports.getStories = async (req, res) => {
 
 exports.myStories = async (req, res) => {
     try{
-        const stories = await Story.find({author : req.username})
+        const stories = await Story.find({ author : req.username })
         res.json(stories.map(s => {
             const result = s.clean();
             result.deletable = true;
@@ -41,11 +42,11 @@ exports.delete = async (req, res) => {
         } catch (e) {}
         
     });
-    await Story.deleteOne({_id : req.body.id});
+    await Story.deleteOne({ _id : req.body.id });
     res.json({message : 'success'});
 }
 
-exports.upload = function (req, res) {
+exports.upload = (req, res) => {
     const userStory = req.body;
     if (userStory == null) {
         res.status(403).send('No data sent!');
@@ -58,12 +59,19 @@ exports.upload = function (req, res) {
             storyText: userStory.storyText,
             storyImages: req.files.map(file => file.filename)
         })
-        newStory.save(function (err, results) {
+        newStory.save((err, results) => {
             if (err) {
                 console.log(err);
                 res.status(500).send('Invalid data!');
                 return;
             }
+
+            try {
+                socket.sendNewPostAlert();
+            } catch (e){
+                console.log("Socket trouble: " + e.message);
+            }
+
             res.json(newStory);
         });
     } catch (e) {

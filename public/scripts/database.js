@@ -44,12 +44,13 @@ const loadMyStories = async () => {
 }
 
 const saveStory = async (story) => {
-    return dbPromise.then(async db => {
+    await dbPromise.then(async db => {
         const trans = db.transaction(ALL_STORIES_STORE, 'readwrite');
         const store = trans.objectStore(ALL_STORIES_STORE);
         await store.add(story);
         return trans.complete;
     });
+    return story;
 }
 
 const deleteStory = async (id) => {

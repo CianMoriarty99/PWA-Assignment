@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 
 
@@ -28,7 +28,7 @@ User.statics.verify = async (username, password) => {
         console.log(username,password)
         const user = await userModel.findOne({ user_name : username });
         if (!user) {
-            console.log("failed")
+            console.log("failed");
             return false;
         } 
         const verified = await user.verifyPassword(password);
