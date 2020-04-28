@@ -76,8 +76,7 @@ const owns_story = async (req, res, next) => {
         } else {
             console.log("No Story")
             res.status(403).send("Story doesn't exist")
-        }
-        
+        }  
     }
     catch(e) {
         console.log(e)

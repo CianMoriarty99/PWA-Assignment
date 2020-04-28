@@ -1,0 +1,38 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>All Stories</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <h1> All Stories </h1>
+    <div id="stories"></div>
+    <form action="/stories/upload" method="POST">	
+        <label>	
+            Story:	
+            <input id="storyText" type="text"/>	
+        </label>	
+        <br>	
+        <label>	
+            Image:	
+            <input id="images" multiple type="file" accept="image/*"/>	
+        </label>	
+        <div id="storyImagesToUpload"></div>	
+    </form>
+    <button id="uploadStory"> Submit </button>
+
+    <p id='uploadResult'></p>
+    
+</body>
+
+<script src="/scripts/idb.js"></script>
+<script src="/scripts/database.js"></script>
+<script src="/scripts/common.js"></script>
+<script src="/scripts/uploadStory.js"></script>
+
+</html>

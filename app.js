@@ -3,11 +3,15 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const jwt = require('jsonwebtoken');
 
 const indexRouter = require('./routes/index');
 const storyRouter = require('./routes/stories');
 const usersRouter = require('./routes/users');
 const {logged_in, logged_out } = require('./utils')
+const User = require('./models/users');
+const users = require('./controllers/users');
+const {secret} = require('./private');
 
 const app = express();
 
@@ -22,30 +26,22 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/li', logged_in , (req, res) => {
-  res.send(req.username)
-})
-
-app.get('/lo', logged_out , (req, res) => {
-  res.send("user logged out")
-})
-
-app.post('/login', async (req, res) => { //logged_out
-  const username = req.body.username;
-  const password = req.body.password;
-  console.log(username, password)
-  const user = await User.verify(username, password);//cannot read property 'verify' of undefined
-  if (!user) {
-      console.log('no pass match');
-      res.status(401).send('no password match');
-      return;
-   }
-  const token = jwt.sign({ username }, secret, {
-       expiresIn: '1h'
-  });
-  res.cookie('token', token, { httpOnly: true })
-  res.redirect('/')
+  res.send(req.username);
 });
 
+app.get('/lo', logged_out , (req, res) => {
+  res.send("user logged out");
+});
+
+app.get('/register', (req, res) => {
+  res.render('register.ejs');
+});
+
+app.get('/login', (req, res) => {
+  res.render('login.ejs')
+});
+
+app.post('/login', users.login);
 
 app.get('/logout', (req,res) => {
   res.cookie('token', '', { httpOnly: true })

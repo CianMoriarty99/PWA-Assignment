@@ -7,7 +7,7 @@ exports.init = async () => {
     // uncomment if you need to drop the database
     //
     
-    await Story.deleteMany({})
+    // await Story.deleteMany({})
 
 
     // var user = new User({

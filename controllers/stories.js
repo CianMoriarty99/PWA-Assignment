@@ -8,8 +8,8 @@ exports.getStories = async (req, res) => {
         const stories = await Story.find({});
         const fixedStories = stories.map(s => {
             const result = s.clean();
-            result.deletable = (req.username && s.author == req.username)
-            return result
+            result.deletable = (req.username && s.author == req.username);
+            return result;
         })
         res.json(fixedStories);
     } catch (e) {
@@ -22,9 +22,9 @@ exports.myStories = async (req, res) => {
     try{
         const stories = await Story.find({author : req.username})
         res.json(stories.map(s => {
-            const result = s.clean()
-            result.deletable = true
-            return result
+            const result = s.clean();
+            result.deletable = true;
+            return result;
         }));
     } catch (e){
         console.log(e);
@@ -33,22 +33,22 @@ exports.myStories = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    const story = req.story
+    const story = req.story;
     story.storyImages.forEach(imageName => {
-        const filepath = `./public/images/${imageName}`
+        const filepath = `./public/images/${imageName}`;
         try {
-            fs.unlinkSync(filepath)
+            fs.unlinkSync(filepath);
         } catch (e) {}
         
     });
-    await Story.deleteOne({_id : req.body.id})
-    res.json({message : 'success'})
+    await Story.deleteOne({_id : req.body.id});
+    res.json({message : 'success'});
 }
 
 exports.upload = function (req, res) {
     const userStory = req.body;
     if (userStory == null) {
-        res.status(403).send('No data sent!')
+        res.status(403).send('No data sent!');
     }
     try {
         const newStory = new Story({

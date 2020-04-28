@@ -95,10 +95,6 @@ const generateStoryElement = (story) => {
         });
         result.appendChild(deleteButton);
     }
-
-
-
-
     return result;
 }
 

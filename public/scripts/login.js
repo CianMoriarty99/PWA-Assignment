@@ -20,7 +20,7 @@ document.getElementById('loginButton').addEventListener('click', e => {
     
     console.log(data);
 
-    return fetch('/users/login', {
+    return fetch('/login', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -28,6 +28,6 @@ document.getElementById('loginButton').addEventListener('click', e => {
         }
     }).then(status)
     .then(res => res.json())
-    .then(res => loginResult.innerHTML = JSON.stringify(res))
-    .catch(err => loginResult.innerHTML = 'no log in');
+    .then(res => result.innerHTML = JSON.stringify(res))
+    .catch(err => result.innerHTML = 'no log in');
 });
