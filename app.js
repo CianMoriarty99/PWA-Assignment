@@ -8,10 +8,8 @@ const jwt = require('jsonwebtoken');
 const indexRouter = require('./routes/index');
 const storyRouter = require('./routes/stories');
 const usersRouter = require('./routes/users');
-const {logged_in, logged_out } = require('./utils')
-const User = require('./models/users');
+const { logged_in, logged_out } = require('./utils')
 const users = require('./controllers/users');
-const {secret} = require('./private');
 
 const app = express();
 
@@ -43,17 +41,17 @@ app.get('/login', (req, res) => {
 
 app.post('/login', users.login);
 
-app.get('/logout', (req,res) => {
+app.get('/logout', (req, res) => {
   res.cookie('token', '', { httpOnly: true })
-  res.redirect('/')
+    .redirect('/')
 })
 
 app.use('/', indexRouter);
-app.use('/stories', storyRouter);
 app.use('/users', usersRouter);
+app.use('/stories', storyRouter);
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
+app.use((req, res) => {
   next(createError(404));
 });
 
@@ -64,8 +62,8 @@ app.use((err, req, res) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500)
+    .render('error');
 });
 
 

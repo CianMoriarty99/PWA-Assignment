@@ -27,7 +27,6 @@ document.getElementById('loginButton').addEventListener('click', e => {
             'Content-Type': 'application/json'
         }
     }).then(status)
-    .then(res => res.json())
-    .then(res => result.innerHTML = JSON.stringify(res))
+    .then(res => document.location.href = '/')
     .catch(err => result.innerHTML = 'no log in');
 });

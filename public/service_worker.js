@@ -1,9 +1,9 @@
 const cache_name = 'pwa_stories';
 
 const cache_urls = new Set([
+    '/stylesheets/style.css',
     '/scripts/idb.js',
     '/scripts/database.js',
-    '/stylesheets/style.css',
     '/scripts/allStories.js',
     '/scripts/myStories.js',
     '/scripts/uploadStory.js',

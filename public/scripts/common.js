@@ -61,12 +61,11 @@ const generateStoryElement = (story) => {
 
     const message = document.createElement("p");
     message.innerText = story.storyText;
-    //if (story.storyImages.length) console.log(story.storyImages)
 
     const images = document.createElement("span");
-    for (let i = 0; i < story.storyImages.length; i++) {
+    for (let image of story.storyImages) {
         const img = document.createElement("img");
-        img.src = URL.createObjectURL(story.storyImages[i]);
+        img.src = URL.createObjectURL(image);
         images.appendChild(img);
     }
     const date = document.createElement("p");
@@ -84,36 +83,33 @@ const generateStoryElement = (story) => {
             const url = '/stories'
             const options = {
                 method: 'DELETE',
-                headers: 
-                {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({id: story.id})
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: story.id })
             }
             fetch(url, options)
-                .then(console.log).catch(console.log)
+                .then(console.log)
+                .catch(console.log);
         });
         result.appendChild(deleteButton);
     }
     return result;
 }
 
-function displayStories(stories) {
+const displayStories = (stories) => {
     storiesDiv.style.visibility = 'hidden';
     storiesDiv.innerHTML = '';
 
-    for (let i = 0; i < stories.length; i++) {
-        const story = stories[i];
+    // for (let i = 0; i < stories.length; i++) {
+    for (let story  of stories) {
         const ele = generateStoryElement(story);
-
         storiesDiv.appendChild(ele);
         storiesDiv.appendChild(document.createElement("br"));
-
     }
+
     storiesDiv.style.visibility = 'visible';
 }
 
-const sortStories = () => {
+const sortStories = stories => {
     stories.sort((a, b) => {
         if (a.date === b.date) {
             return a.time > b.time ? 1 : -1

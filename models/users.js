@@ -16,9 +16,6 @@ User.virtual('username')
         return result;
     });
 
-
-
-
 User.methods.verifyPassword = async function(password) {
     return await bcrypt.compare(password, this.password);
 };
@@ -40,11 +37,7 @@ User.statics.verify = async (username, password) => {
     }
 }
 
-
-
-
-User.set('toObject', {getters: true, virtuals: true});
-
+User.set('toObject', { getters: true, virtuals: true });
 
 const userModel = mongoose.model('User', User );
 

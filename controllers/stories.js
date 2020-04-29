@@ -40,7 +40,6 @@ exports.delete = async (req, res) => {
         try {
             fs.unlinkSync(filepath);
         } catch (e) {}
-        
     });
     await Story.deleteOne({ _id : req.body.id });
     res.json({message : 'success'});
@@ -64,7 +63,7 @@ exports.upload = (req, res) => {
             time: userStory.time,
             storyText: userStory.storyText,
             storyImages: req.files.map(file => file.filename)
-        })
+        });
         newStory.save((err, results) => {
             if (err) {
                 console.log(err);

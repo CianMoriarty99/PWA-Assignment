@@ -19,4 +19,4 @@ socket.on("NewStoryPost", () => {
     getAllStories();
 });
 
-window.addEventListener('load', allLoaded, false)
+window.addEventListener('load', allLoaded, false);
