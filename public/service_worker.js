@@ -42,7 +42,6 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
     const dest = new URL(event.request.url).pathname;
-    console.log(dest);
     if (dest in cache_first) {
         event.respondWith(
             caches.match(cache_first[dest]).then(response => {

@@ -1,27 +1,30 @@
 const storyImageUpload = document.getElementById("images");
 const storyTextBox = document.getElementById("storyText");
 
-const result = document.getElementById("uploadResult");
+const errors = document.getElementById("storyErrors");
 
 document.getElementById('uploadStory').addEventListener('click', () => {
-    console.log('trying to upload');
     const storyText = storyTextBox.value.trim();
-    const images = Array.from(storyImageUpload.files);	
-    const date = new Date().toISOString().slice(0, 10);	
-    const time = new Date().toLocaleTimeString();	
+    const images = Array.from(storyImageUpload.files);		
 
-    const newStory = {	
-        'date': date,	
-        'time': time,	
+    let validationErrors = false;
+
+    if (!validStory(storyText)) {
+        const errorMessage = document.createElement('p');
+        errorMessage.textContent = "Story must be between 1 and 150 characters";
+        errors.appendChild(errorMessage);
+        validationErrors = true;
+    }
+
+    if (validationErrors) return;
+
+    const newStory = {		
         'storyImages': images,	
         'storyText': storyText	
     };	
 
     const formdata = new FormData();	
-
     formdata.append('storyText', storyText);	
-    formdata.append('time', time);	
-    formdata.append('date', date);	
     for (let image of images) {	
         formdata.append('images', image);	
     }	
@@ -33,11 +36,13 @@ document.getElementById('uploadStory').addEventListener('click', () => {
     .then(response => response.json())
     .then(response => {	
         response.storyImages = images;	
-        uploadResult.innerHTML = 'success';
         saveStory(response);	
+        document.location.href = '/';
     }).catch(err => {
         uploadResult.innerHTML = err;
-        
+        const errorMessage = document.createElement('p');
+        errorMessage.textContent = err;
+        errors.appendChild(errorMessage);
         uploadLater(newStory);	
     });	
 });

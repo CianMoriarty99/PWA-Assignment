@@ -71,6 +71,25 @@ const deleteAllStories = async () => {
     });
 }
 
+const deleteAllMyStories = async () => {
+    dbPromise.then(async db => {
+        const trans = db.transaction(MY_STORIES_STORE, 'readwrite');
+        const store = trans.objectStore(MY_STORIES_STORE);
+        await store.clear()
+        return trans.complete;
+    });
+}
+
+const saveMyStory = async (story) => {
+    await dbPromise.then(async db => {
+        const trans = db.transaction(MY_STORIES_STORE, 'readwrite');
+        const store = trans.objectStore(MY_STORIES_STORE);
+        await store.add(story);
+        return trans.complete;
+    });
+    return story;
+}
+
 
 
 const addToUploadList = (story) => {

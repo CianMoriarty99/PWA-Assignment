@@ -6,7 +6,7 @@ const Story = new Schema({
     author: { type: String, required: true, max: 100 },
     date: { type: String, required: true, max: 100 },
     time: { type: String, required: true, max: 100 },
-    storyText: { type: String, required: true, max: 100 },
+    storyText: { type: String, required: true, min: 1, max: 150 },
     storyImages: { type: Array, required: true }
 });
 

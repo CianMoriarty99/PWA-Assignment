@@ -6,8 +6,8 @@ const allLoaded = async () => {
         .then(status)
         .then(r => r.json())
         .then(async allStories => {
-            deleteAllStories();
-            const loadedStories = await Promise.all(allStories.map( element => getImages(element).then(saveStory)));
+            deleteAllMyStories();
+            const loadedStories = await Promise.all(allStories.map( element => getImages(element).then(saveMyStory)));
             displayStories(loadedStories);
         }).catch(console.log());
 }

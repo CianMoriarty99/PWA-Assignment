@@ -58,10 +58,14 @@ exports.upload = async (req, res) => {
             .send('No data sent!');
     }
     try {
+        const rawDate = new Date();
+        const date = rawDate.toISOString().slice(0, 10);	
+        const time = rawDate.toLocaleTimeString();	
+
         const newStory = new Story({
             author: req.username,
-            date: userStory.date,
-            time: userStory.time,
+            date: date,
+            time: time,
             storyText: userStory.storyText,
             storyImages: req.files.map(file => file.filename)
         });

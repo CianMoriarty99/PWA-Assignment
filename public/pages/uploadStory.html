@@ -14,27 +14,25 @@
     <a href="/upload">Upload New Story</a>
     <h1> All Stories </h1>
     <div id="stories"></div>
-    <form action="/stories/upload" method="POST">	
-        <label>	
-            Story:	
-            <input id="storyText" type="text"/>	
-        </label>	
-        <br>	
-        <label>	
-            Image:	
-            <input id="images" multiple type="file" accept="image/*"/>	
-        </label>	
-        <div id="storyImagesToUpload"></div>	
-    </form>
+    <label>	
+        Story:	
+        <input id="storyText" type="text"/>	
+    </label>	
+    <br>	
+    <label>	
+        Image:	
+        <input id="images" multiple type="file" accept="image/*"/>	
+    </label>	
     <button id="uploadStory"> Submit </button>
 
-    <p id='uploadResult'></p>
+    <div id='storyErrors'></div>
     
 </body>
 
 <script src="/scripts/idb.js"></script>
 <script src="/scripts/database.js"></script>
 <script src="/scripts/common.js"></script>
+<script src="/scripts/validate.js"></script>
 <script src="/scripts/uploadStory.js"></script>
 
 </html>

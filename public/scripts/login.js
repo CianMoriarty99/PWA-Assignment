@@ -22,16 +22,16 @@ document.getElementById('loginButton').addEventListener('click', e => {
 
     if (!validUsername(data.username)) {
         const errorMessage = document.createElement('p');
-        errorMessage.textContent = "Username can only contain letters, numbers, and underscores. Must also be between 8 and 64 characters."
+        errorMessage.textContent = "Username can only contain letters, numbers, and underscores. Must also be between 8 and 64 characters.";
         errors.appendChild(errorMessage);
-        validationErrors = true
+        validationErrors = true;
     } 
 
     if (!validPassword(data.password)) {
         const errorMessage = document.createElement('p');
-        errorMessage.textContent = "Password cannot contain spaces. Must also be between 8 and 64 characters."
+        errorMessage.textContent = "Password cannot contain spaces. Must also be between 8 and 64 characters.";
         errors.appendChild(errorMessage);
-        validationErrors = true
+        validationErrors = true;
     } 
 
     if (validationErrors) return
