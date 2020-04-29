@@ -51,10 +51,11 @@ exports.delete = async (req, res) => {
     }
 }
 
-exports.upload = (req, res) => {
+exports.upload = async (req, res) => {
     const userStory = req.body;
     if (userStory == null) {
-        res.status(403).send('No data sent!');
+        res.status(403)
+            .send('No data sent!');
     }
     try {
         const newStory = new Story({
@@ -64,23 +65,18 @@ exports.upload = (req, res) => {
             storyText: userStory.storyText,
             storyImages: req.files.map(file => file.filename)
         });
-        newStory.save((err, results) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send('Invalid data!');
-                return;
-            }
+        await newStory.save();
 
-            try {
-                socket.sendNewPostAlert();
-            } catch (e){
-                console.log("Socket trouble: " + e.message);
-            }
+        try {
+            socket.sendNewPostAlert();
+        } catch (e){
+            console.log("Socket trouble: " + e.message);
+        }
 
-            res.json(newStory);
-        });
+        res.json(newStory);
     } catch (e) {
         console.log(e);
-        res.status(500).send('error ' + e);
+        res.status(500)
+            .send('error ' + e);
     }
 }

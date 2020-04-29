@@ -62,7 +62,7 @@ const deleteStory = async (id) => {
     });
 }
 
-const deleteAllStories = () => {
+const deleteAllStories = async () => {
     dbPromise.then(async db => {
         const trans = db.transaction(ALL_STORIES_STORE, 'readwrite');
         const store = trans.objectStore(ALL_STORIES_STORE);

@@ -8,7 +8,7 @@ const getAllStories = () => {
         .then(status)
         .then(r => r.json())
         .then(async allStories => {
-            deleteAllStories();
+            await deleteAllStories();
             displayStories(await Promise.all(allStories.map(element => getImages(element).then(saveStory))));
         }).catch(console.log())
 }

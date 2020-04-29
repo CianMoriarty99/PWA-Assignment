@@ -2,16 +2,16 @@ const username = document.getElementById('username');
 const password = document.getElementById('password');
 const result = document.getElementById('loginResult');
 
-const status = (response) => {
+const status = async (response) => {
     if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response)
+        return Promise.resolve(response);
     } else {
-        return Promise.reject(new Error(response.text()))
+        return Promise.reject(await response.text());
     }
 }
 
 document.getElementById('loginButton').addEventListener('click', e => {
-    console.log('i am added!');
+
     e.preventDefault();
     const data = {
         username: username.value,

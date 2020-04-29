@@ -5,7 +5,6 @@ const storiesDiv = document.getElementById('stories');
     const toUpload = await getToUploadStories();
     Promise.allSettled(
         toUpload.map(e => {
-            console.log(e);
             const formdata = new FormData();
             formdata.append('author', e.author);
             formdata.append('storyText', e.storyText);
@@ -33,11 +32,11 @@ const storiesDiv = document.getElementById('stories');
     );
 })();
 
-const status = (response) => {
+const status = async (response) => {
     if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response)
+        return Promise.resolve(response);
     } else {
-        return Promise.reject(new Error(response.text()))
+        return Promise.reject(await response.text());
     }
 }
 

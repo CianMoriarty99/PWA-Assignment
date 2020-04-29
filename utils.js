@@ -14,13 +14,13 @@ const logged_in = async (req, res, next) => {
             next();
         }
         catch(err) {
-            console.log('Token is invalid or expired');
-            res.status(403).send('Token is invalid or expired');
+            res.status(403)
+                .send('Token is invalid or expired');
         }
     }
     else {
-        console.log('user must be logged in to access this');
-        res.status(403).send('Must be logged in');
+        res.status(403)
+            .send('User must be logged in');
     }
 }
 
@@ -34,12 +34,10 @@ const optional_logged_in = async (req,res,next) => {
             next();
         }
         catch(err) {
-            console.log('Token is invalid or expired');
             next();
         }
     }
     else {
-        console.log('user not logged in');
         next();
     }
 }
@@ -49,8 +47,9 @@ const logged_out = (req, res, next) => {
     if (token) {
         try {
             jwt.verify(token, secret);
-            console.log('user must be logged out to access this');
-            res.status(403).send('Must be logged out');
+            console.log('User must be logged out to access this');
+            res.status(403)
+                .send('User must be logged out to access this');
         }
         catch(err) {
             next();
@@ -62,25 +61,25 @@ const logged_out = (req, res, next) => {
 }
 
 const owns_story = async (req, res, next) => {
-    console.log("owns_story")
-    const id = req.body.id
+    const id = req.body.id;
     if (!id) {
-        res.status(403).send("No ID")
-        return
+        res.status(403)
+            .send("Missing ID field");
+        return;
     } 
     try {
-        const story = await Story.exists(id)
+        const story = await Story.exists(id);
         if (story && story.author == req.username) {
-            req.story = story
+            req.story = story;
             next();
         } else {
-            console.log("No Story")
-            res.status(403).send("Story doesn't exist")
+            res.status(403)
+                .send("Story doesn't exist");
         }  
     }
     catch(e) {
-        console.log(e)
-        res.status(403).send("BAD")
+        res.status(403)
+            .send("????????");
     }
 }
 
