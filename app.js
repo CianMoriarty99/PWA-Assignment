@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 
 const indexRouter = require('./routes/index');
 const storyRouter = require('./routes/stories');
-const usersRouter = require('./routes/users');
 const { logged_in, logged_out } = require('./utils')
 const users = require('./controllers/users');
 
@@ -35,6 +34,8 @@ app.get('/register', (req, res) => {
   res.render('register.ejs');
 });
 
+app.post('/register', users.register);
+
 app.get('/login', (req, res) => {
   res.render('login.ejs')
 });
@@ -47,7 +48,6 @@ app.get('/logout', (req, res) => {
 })
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/stories', storyRouter);
 
 // catch 404 and forward to error handler
