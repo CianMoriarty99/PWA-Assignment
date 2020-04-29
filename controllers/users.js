@@ -36,6 +36,13 @@ exports.register = async (req, res) => {
         res.status(400).send('required fields missing');
         return;
     }
+
+    const user = await User.findOne({ user_name : username });
+    if (user) {
+        console.log('username taken');
+        res.status(401).send('username taken');
+        return;
+    }
     try{
         const hashed = await bcrypt.hash(password, saltRounds);
         const user = User.create({ 

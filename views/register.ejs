@@ -1,13 +1,33 @@
-<h1>Register</h1>
-<form action="/users/register" method="POST">
-  <div>
-    <label for="username">Username</label>
-    <input type="text" id="username" name="username" required>
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required>
-  </div>
-  <button type="submit">Register</button>
-</form>
-<a href="/login">Login</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <nav>
+    <a href="../login">Login</a> |
+    <a href="../../">Home</a> |
+    <a href="../register">Register</a> |
+    <a href="../me">My Stories</a> |
+    <a href="../upload">Upload New Story</a>
+  </nav>
+  <h1>Register</h1>
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+  </form>
+  <button id="registerButton">Register</button>
+  <div id="registerResult"></div>
+  
+</body>
+
+<script src="/scripts/register.js"></script>
+
+</html>
