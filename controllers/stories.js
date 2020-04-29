@@ -44,6 +44,12 @@ exports.delete = async (req, res) => {
     });
     await Story.deleteOne({ _id : req.body.id });
     res.json({message : 'success'});
+
+    try {
+        socket.sendNewPostAlert();
+    } catch (e){
+        console.log("Socket trouble: " + e.message);
+    }
 }
 
 exports.upload = (req, res) => {

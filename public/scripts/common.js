@@ -46,7 +46,7 @@ const getImages = async (story) => {
         const url = `/images/${s}`
         return await fetch(url)
             .then(r => r.blob())
-    })
+    });
     story.storyImages = await Promise.all(story.storyImages);
     return story;
 }
