@@ -14,12 +14,13 @@ document.getElementById('registerButton').addEventListener('click', e => {
     console.log('i am added!');
     e.preventDefault();
     const data = {
-        username: username.value,
-        password: password.value
+        username: username.value.trim(),
+        password: password.value.trim()
     }
+
     
     console.log(data);
-
+    
     return fetch('/register', {
         method: 'POST',
         body: JSON.stringify(data),

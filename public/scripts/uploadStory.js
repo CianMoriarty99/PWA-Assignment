@@ -5,7 +5,7 @@ const result = document.getElementById("uploadResult");
 
 document.getElementById('uploadStory').addEventListener('click', () => {
     console.log('trying to upload');
-    const storyText = storyTextBox.value;	
+    const storyText = storyTextBox.value.trim();
     const images = Array.from(storyImageUpload.files);	
     const date = new Date().toISOString().slice(0, 10);	
     const time = new Date().toLocaleTimeString();	

@@ -97,7 +97,7 @@ const generateStoryElement = (story) => {
 const displayStories = (stories) => {
     storiesDiv.style.visibility = 'hidden';
     storiesDiv.innerHTML = '';
-
+    sortStories(stories);
     // for (let i = 0; i < stories.length; i++) {
     for (let story  of stories) {
         const ele = generateStoryElement(story);
@@ -111,9 +111,9 @@ const displayStories = (stories) => {
 const sortStories = stories => {
     stories.sort((a, b) => {
         if (a.date === b.date) {
-            return a.time > b.time ? 1 : -1
+            return a.time > b.time ? -1 : 1
         }
-        return a.date > b.date ? 1 : -1;
+        return a.date > b.date ? -1 : 1;
     });
 }
 

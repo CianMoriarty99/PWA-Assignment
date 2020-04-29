@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var User = require('../models/users');
-var Story = require('../models/stories');
+let mongoose = require('mongoose');
+let User = require('../models/users');
+let Story = require('../models/stories');
 
 
 exports.init = async () => {
@@ -10,7 +10,7 @@ exports.init = async () => {
     // await Story.deleteMany({})
 
 
-    // var user = new User({
+    // let user = new User({
     //     username: 'Yeet',
     // });
 
