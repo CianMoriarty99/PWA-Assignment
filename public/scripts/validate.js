@@ -3,7 +3,7 @@ const validUsername = (username) => {
 };
 
 const validPassword = (password) => {
-    return !!/^[!-~]{8,64}$/.exec(password);
+    return !!/^\S{8,64}$/.exec(password);
 };
 
 const validStory = (story) => {
