@@ -5,13 +5,9 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
-    <nav>
-        <a href="/login">Login</a> |
-        <a href="/">Home</a> |
-        <a href="/register">Register</a> |
-        <a href="/me">My Stories</a> |
-        <a href="/upload">Upload New Story</a>
-    </nav>
+    <span id='navbar'>
+        <a href="/">Home</a>
+    </span>
 
     <h1><%= title %></h1>
     hello
@@ -19,5 +15,6 @@
 </body>
 <script src="/scripts/idb.js"></script>
 <script src="/scripts/database.js"></script>
+<script src="/scripts/common.js"></script>
 <script src="/scripts/setup.js"></script>
 </html>

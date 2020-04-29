@@ -2,14 +2,6 @@ const username = document.getElementById('username');
 const password = document.getElementById('password');
 const errors = document.getElementById('registerErrors');
 
-const status = async (response) => {
-    if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response);
-    } else {
-        return Promise.reject(await response.text());
-    }
-}
-
 document.getElementById('registerButton').addEventListener('click', e => {
     errors.innerHTML = '';
     e.preventDefault();

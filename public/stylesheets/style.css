@@ -18,3 +18,7 @@ img {
 .warningMessage {
   color: red;
 }
+
+#navbar * {
+  margin-right: 10px;
+}

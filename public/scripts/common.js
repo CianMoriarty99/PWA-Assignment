@@ -1,36 +1,5 @@
 const storiesDiv = document.getElementById('stories');
-
-(async () => {
-    await initDbPromise();
-    const toUpload = await getToUploadStories();
-    Promise.allSettled(
-        toUpload.map(e => {
-            const formdata = new FormData();
-            formdata.append('author', e.author);
-            formdata.append('storyText', e.storyText);
-            formdata.append('time', e.time);
-            formdata.append('date', e.date);
-            for (let image of e.storyImages) {
-                formdata.append('images', image);
-            }
-
-            return fetch('/stories/upload', {
-                method: 'POST',
-                body: formdata,
-            }).then(status)
-                .then(response => response.json())
-                .then(response => {
-                    console.log('uploaded stored!');
-                    console.log(response);
-                    response.storyImages = e.storyImages;
-                    saveStory(response);
-                    successfullyUploaded(e.id);
-                }).catch(err => {
-                    console.log(err);
-                });
-        })
-    );
-})();
+const navbar = document.getElementById('navbar');
 
 const status = async (response) => {
     if (response.status >= 200 && response.status < 300) {
@@ -70,10 +39,14 @@ const generateStoryElement = (story) => {
     const date = document.createElement("p");
     date.innerText = story.date;
 
+    const time = document.createElement("p");
+    time.innerText = story.time;
+
     result.appendChild(author);
     result.appendChild(message);
     result.appendChild(images);
     result.appendChild(date);
+    result.appendChild(time);
 
     if(story.deletable){
         const deleteButton = document.createElement("button");
@@ -98,7 +71,6 @@ const displayStories = (stories) => {
     storiesDiv.style.visibility = 'hidden';
     storiesDiv.innerHTML = '';
     sortStories(stories);
-    // for (let i = 0; i < stories.length; i++) {
     for (let story  of stories) {
         const ele = generateStoryElement(story);
         storiesDiv.appendChild(ele);
@@ -117,4 +89,78 @@ const sortStories = stories => {
     });
 }
 
-initDb();
+
+
+const commonAllLoaded = () => {
+    initDb();
+
+    (async () => {
+        await initDbPromise();
+        const toUpload = await getToUploadStories();
+        Promise.allSettled(
+            toUpload.map(e => {
+                const formdata = new FormData();
+                formdata.append('author', e.author);
+                formdata.append('storyText', e.storyText);
+                for (let image of e.storyImages) {
+                    formdata.append('images', image);
+                }
+    
+                return fetch('/stories/upload', {
+                    method: 'POST',
+                    body: formdata,
+                }).then(status)
+                    .then(response => response.json())
+                    .then(response => {
+                        console.log('uploaded stored!');
+                        console.log(response);
+                        response.storyImages = e.storyImages;
+                        saveStory(response);
+                        successfullyUploaded(e.id);
+                    }).catch(err => {
+                        console.log(err);
+                    });
+            })
+        );
+    })();
+
+    fetch('/li')
+        .then(status)
+        .then(res => res.text())
+        .then(username => {
+            const myStories = document.createElement('a');
+            myStories.href = '/me';
+            myStories.innerHTML = 'My Stories';
+
+            const uploadStory = document.createElement('a');
+            uploadStory.href = '/upload';
+            uploadStory.innerHTML = 'Upload Story';
+
+            const usernameField = document.createElement('span');
+            usernameField.innerHTML = username;
+
+            const logoutOption = document.createElement('a');
+            logoutOption.href = '/logout';
+            logoutOption.innerHTML = 'Logout';
+
+            navbar.appendChild(myStories);
+            navbar.appendChild(uploadStory);
+            navbar.appendChild(usernameField);
+            navbar.appendChild(logoutOption);
+        }).catch(() => {
+
+
+            const loginOption = document.createElement('a');
+            loginOption.href = '/login';
+            loginOption.innerHTML = 'Login';
+            const registerOption = document.createElement('a');
+            registerOption.href = '/register';
+            registerOption.innerHTML = 'Register';
+
+            navbar.appendChild(loginOption);
+            navbar.appendChild(registerOption);
+        });
+}
+
+
+window.addEventListener('load', commonAllLoaded, false);
