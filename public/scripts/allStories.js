@@ -13,10 +13,17 @@ const getAllStories = () => {
         }).catch(console.log())
 }
 
-const socket = io();
+try {
+    const socket = io();
+    socket.on("NewStoryPost", () => {
+        getAllStories();
+    });
+}
+catch (err) {
+    console.log(err);
+}
 
-socket.on("NewStoryPost", () => {
-    getAllStories();
-});
+
+
 
 window.addEventListener('load', allLoaded, false);

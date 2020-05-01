@@ -4,6 +4,7 @@ const cache_urls = new Set([
     '/stylesheets/style.css',
     '/scripts/idb.js',
     '/scripts/database.js',
+    '/scripts/common.js',
     '/scripts/allStories.js',
     '/scripts/myStories.js',
     '/scripts/uploadStory.js',
@@ -19,8 +20,11 @@ self.addEventListener('install', event => {
     console.log('installing service worker');
     event.waitUntil(
         caches.open(cache_name).then(cache => {
+            const toCache = Array.from(cache_urls);
+            Object.values(cache_first).forEach(v => toCache.push(v));
             console.log('building cache');
-            return cache.addAll(cache_urls);
+            return cache.addAll(toCache);
+
         })
     );
 });

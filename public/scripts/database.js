@@ -3,7 +3,7 @@ let dbPromise;
 const DB_NAME = 'stories_db';
 const ALL_STORIES_STORE = 'allStories';
 const MY_STORIES_STORE = 'myStories';
-const TO_UPLOAD_STORE = 'toUpload'
+const TO_UPLOAD_STORE = 'toUpload';
 
 const initDbPromise = (resolve) => {
     Promise.all([initDb])

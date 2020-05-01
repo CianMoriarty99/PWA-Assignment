@@ -148,8 +148,6 @@ const commonAllLoaded = () => {
             navbar.appendChild(usernameField);
             navbar.appendChild(logoutOption);
         }).catch(() => {
-
-
             const loginOption = document.createElement('a');
             loginOption.href = '/login';
             loginOption.innerHTML = 'Login';
