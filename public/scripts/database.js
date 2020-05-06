@@ -115,8 +115,6 @@ const storeMyStories = async (allStories) => {
 
 const saveStory = async (story) => {
     await dbPromise.then(async db => {
-        console.log(Object.keys(story));
-        console.log(story);
         const trans = db.transaction(STORIES_STORE, 'readwrite');
         const store = trans.objectStore(STORIES_STORE);
         await store.put(story);

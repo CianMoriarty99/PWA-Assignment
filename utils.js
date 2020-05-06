@@ -96,6 +96,7 @@ const story_exists = async (req, res, next) => {
     try {
         const story = await Story.exists(id);
         if (story) {
+            req.id = id;
             req.story = story;
             next();
         } else {

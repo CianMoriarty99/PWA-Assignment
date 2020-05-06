@@ -56,19 +56,42 @@ exports.delete = async (req, res) => {
 
 exports.vote = async (req, res) => {
     const vote = req.vote;
-    const id = req.body.id;
+    const id = req.id;
     const story = req.story;
-    const username = req.body.username;
+    const username = req.username;
 
-
-    const voteRecord = await Vote.findOneAndUpdate(
-        { author: username, storyId: id },
-        { value: vote },
-        { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
-
-    res.status(200)
-        .json({ message: `voted ${voteRecord.value}`});
+    const voteRecord = await Vote.findOne({ author: username, storyId: id });
+    console.log(voteRecord);
+    if (voteRecord) {
+        const difference = vote - voteRecord.value;
+        if (difference !== 0) {
+            await Promise.all([
+                Story.findByIdAndUpdate(
+                    id,
+                    { voteSum: story.voteSum + difference },
+                    { upsert: true, new: true, setDefaultsOnInsert: true }
+                ),
+                Vote.findOneAndUpdate(
+                    { author: username, storyId: id },
+                    { value: vote },
+                    { upsert: true, new: true, setDefaultsOnInsert: true }
+                )    
+            ]);
+        };
+        res.status(200)
+            .json({ message: `voted ${voteRecord.value}`});
+        return;
+    }
+    else {
+        await Promise.all([
+            new Vote({ author: username, storyId: id, value: vote }).save(),
+            Story.findByIdAndUpdate(
+                id,
+                { voteSum: story.voteSum + vote, voteCount: story.voteCount + 1 },
+                { upsert: true, new: true, setDefaultsOnInsert: true }
+            )
+        ]);
+    }
 }
 
 exports.upload = async (req, res) => {

@@ -32,11 +32,15 @@ const generateStoryElement = (story) => {
     const time = document.createElement("p");
     time.innerText = story.time;
 
+    const score = document.createElement("p");
+    score.innerText = `Score: ${story.voteSum / (story.voteCount || 1)}/5, ${story.voteCount} votes total`;
+
     result.appendChild(author);
     result.appendChild(message);
     result.appendChild(images);
     result.appendChild(date);
     result.appendChild(time);
+    result.appendChild(score);
 
     if(story.deletable){
         const deleteButton = document.createElement("button");
