@@ -132,10 +132,6 @@ const commonAllLoaded = () => {
             myStories.href = '/me';
             myStories.innerHTML = 'My Stories';
 
-            const uploadStory = document.createElement('a');
-            uploadStory.href = '/upload';
-            uploadStory.innerHTML = 'Upload Story';
-
             const usernameField = document.createElement('span');
             usernameField.innerHTML = username;
 
@@ -144,7 +140,6 @@ const commonAllLoaded = () => {
             logoutOption.innerHTML = 'Logout';
 
             navbar.appendChild(myStories);
-            navbar.appendChild(uploadStory);
             navbar.appendChild(usernameField);
             navbar.appendChild(logoutOption);
         }).catch(() => {

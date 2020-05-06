@@ -7,13 +7,11 @@ const cache_urls = new Set([
     '/scripts/common.js',
     '/scripts/allStories.js',
     '/scripts/myStories.js',
-    '/scripts/uploadStory.js',
 ]);
 
 const cache_first = {
     '/': '/pages/allStories.html',
     '/me': '/pages/myStories.html',
-    '/upload': '/pages/uploadStory.html'
 };
 
 self.addEventListener('install', event => {
