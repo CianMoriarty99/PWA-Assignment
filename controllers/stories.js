@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 const Story = require('../models/stories');
+const Vote = require('../models/votes');
 const socket = require("../socket.io/socket-io");
 
 
@@ -11,7 +12,7 @@ exports.getStories = async (req, res) => {
             const result = s.clean();
             result.deletable = (req.username && s.author == req.username);
             return result;
-        })
+        });
         res.json(fixedStories);
     } catch (e) {
         console.log(e);
@@ -20,8 +21,10 @@ exports.getStories = async (req, res) => {
 }
 
 exports.myStories = async (req, res) => {
+    console.log(`called my stories with username ${req.username}`);
     try{
-        const stories = await Story.find({ author : req.username })
+        const stories = await Story.find({ author : req.username });
+        console.log(stories);
         res.json(stories.map(s => {
             const result = s.clean();
             result.deletable = true;
@@ -41,7 +44,7 @@ exports.delete = async (req, res) => {
             fs.unlinkSync(filepath);
         } catch (e) {}
     });
-    await Story.deleteOne({ _id : req.body.id });
+    await Story.deleteOne({ _id : story._id });
     res.json({message : 'success'});
 
     try {
@@ -49,6 +52,23 @@ exports.delete = async (req, res) => {
     } catch (e){
         console.log("Socket trouble: " + e.message);
     }
+}
+
+exports.vote = async (req, res) => {
+    const vote = req.vote;
+    const id = req.body.id;
+    const story = req.story;
+    const username = req.body.username;
+
+
+    const voteRecord = await Vote.findOneAndUpdate(
+        { author: username, storyId: id },
+        { value: vote },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    res.status(200)
+        .json({ message: `voted ${voteRecord.value}`});
 }
 
 exports.upload = async (req, res) => {
@@ -67,7 +87,9 @@ exports.upload = async (req, res) => {
             date: date,
             time: time,
             storyText: userStory.storyText,
-            storyImages: req.files.map(file => file.filename)
+            storyImages: req.files.map(file => file.filename),
+            voteCount: 0,
+            voteSum: 0
         });
         await newStory.save();
 
@@ -76,8 +98,8 @@ exports.upload = async (req, res) => {
         } catch (e){
             console.log("Socket trouble: " + e.message);
         }
-
-        res.json(newStory);
+        console.log(`returning: ${JSON.stringify(newStory.clean())}`);
+        res.json(newStory.clean());
     } catch (e) {
         console.log(e);
         res.status(500)

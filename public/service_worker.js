@@ -39,7 +39,6 @@ self.addEventListener('activate', event => {
            })
        )
     });
-    //createDB();
 });
 
 self.addEventListener('fetch', event => {

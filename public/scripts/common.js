@@ -50,7 +50,7 @@ const generateStoryElement = (story) => {
             }
             fetch(url, options)
                 .then(console.log)
-                .catch(console.log);
+                .catch(r => console.log(r.text()));
         });
         result.appendChild(deleteButton);
     }
@@ -80,8 +80,7 @@ const sortStories = stories => {
 }
 
 
-
-const commonAllLoaded = () => {
+window.addEventListener('load', () => {
     initDb();
 
     (async () => {
@@ -96,14 +95,12 @@ const commonAllLoaded = () => {
                     formdata.append('images', image);
                 }
     
-                return fetch('/stories/upload', {
+                return fetch('/stories', {
                     method: 'POST',
                     body: formdata,
                 }).then(status)
                     .then(response => response.json())
                     .then(response => {
-                        console.log('uploaded stored!');
-                        console.log(response);
                         response.storyImages = e.storyImages;
                         saveStory(response);
                         successfullyUploaded(e.id);
@@ -143,7 +140,4 @@ const commonAllLoaded = () => {
             navbar.appendChild(loginOption);
             navbar.appendChild(registerOption);
         });
-}
-
-
-window.addEventListener('load', commonAllLoaded, false);
+}, false);

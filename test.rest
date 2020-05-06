@@ -1,0 +1,12 @@
+GET http://localhost:3003/stories/vote/5ea99d9e53d9bcfe4ac47764/3
+
+###
+
+POST http://localhost:3003/login
+
+content-type: application/json
+
+{
+    "username": "qqqqqqqq",
+    "password": "qqqqqqqq"
+}

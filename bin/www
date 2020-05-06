@@ -8,8 +8,9 @@ const debug = require('debug')('progressivewebappassignment:server');
 const http = require('http');
 
 
-require('../database/users')
-require('../database/stories')
+require('../database/users');
+require('../database/stories');
+require('../database/votes');
 
 /**
  * Get port from environment and store in Express.

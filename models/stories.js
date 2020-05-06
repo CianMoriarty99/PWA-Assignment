@@ -7,7 +7,9 @@ const Story = new Schema({
     date: { type: String, required: true, max: 100 },
     time: { type: String, required: true, max: 100 },
     storyText: { type: String, required: true, min: 1, max: 150 },
-    storyImages: { type: Array, required: true }
+    storyImages: { type: Array, required: true },
+    voteCount: { type: Number, required: true, min: 0},
+    voteSum: { type: Number, required: true, min: 0 },
 });
 
 Story.methods.clean = function() {
@@ -17,16 +19,16 @@ Story.methods.clean = function() {
         time: this.time,
         date: this.date,
         storyText: this.storyText,
-        storyImages: this.storyImages
+        storyImages: this.storyImages,
+        voteCount: this.voteCount,
+        voteSum: this.voteSum
     }
 };
-
-
 
 Story.statics.exists = async id => {
     try {
         console.log(id);
-        const story = await storyModel.findOne({ _id : id });
+        const story = await storyModel.findOne({ _id: id });
         return story || false;
     }
     catch (err) {
@@ -34,8 +36,6 @@ Story.statics.exists = async id => {
         return false;
     }
 }
-
-
 
 Story.set('toObject', {getters: true, virtuals: true});
 

@@ -55,15 +55,13 @@ document.getElementById('uploadStory').addEventListener('click', () => {
         formdata.append('images', image);	
     }	
 
-    fetch('/stories/upload', {	
+    fetch('/stories', {	
         method: 'POST',	
         body: formdata,	
     }).then(status)	
     .then(response => response.json())
     .then(response => {	
-        response.storyImages = images;	
         saveStory(response);	
-        // document.location.href = '/';
     }).catch(err => {
         const errorMessage = document.createElement('p');
         errorMessage.textContent = err;

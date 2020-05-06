@@ -22,38 +22,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/li', logged_in , (req, res) => {
-  res.send(req.username);
-});
+app.get('/li', logged_in , (req, res) => res.send(req.username));
 
-app.get('/lo', logged_out , (req, res) => {
-  res.send("user logged out");
-});
+app.get('/lo', logged_out , (req, res) => res.send("user logged out"));
 
-app.get('/register', (req, res) => {
-  res.render('register.ejs');
-});
+app.get('/register', (req, res) => res.render('register.ejs'));
 
 app.post('/register', users.register);
 
-app.get('/login', (req, res) => {
-  res.render('login.ejs')
-});
+app.get('/login', (req, res) => res.render('login.ejs'));
 
 app.post('/login', users.login);
 
-app.get('/logout', (req, res) => {
-  res.cookie('token', '', { httpOnly: true })
-    .redirect('/')
-})
+app.get('/logout', (req, res) => res.cookie('token', '', { httpOnly: true }).redirect('/'));
 
 app.use('/', indexRouter);
 app.use('/stories', storyRouter);
 
 // catch 404 and forward to error handler
-app.use((req, res) => {
-  res.redirect('/');
-});
+app.use((req, res) => res.redirect('/'));
 
 // error handler
 app.use((err, req, res) => {
