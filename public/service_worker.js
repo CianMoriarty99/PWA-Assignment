@@ -6,6 +6,7 @@ const cache_urls = new Set([
     '/scripts/database.js',
     '/scripts/common.js',
     '/scripts/allStories.js',
+    '/scripts/validate.js',
     '/scripts/myStories.js',
 ]);
 

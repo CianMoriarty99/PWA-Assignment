@@ -1,14 +1,12 @@
 const allLoaded = async () => {
-    loadMyStories().then(res => {
-        displayStories(res);
-    });
+    loadMyStories().then(displayStories);
     fetch('/stories/myStories')
         .then(status)
         .then(r => r.json())
         .then(async allStories => {
-            deleteAllMyStories();
-            const loadedStories = await Promise.all(allStories.map( element => getImages(element).then(saveMyStory)));
-            displayStories(loadedStories);
+            await storeMyStories(allStories);
+            // const loadedStories = await Promise.all(allStories.map( element => getImages(element).then(saveMyStory)));
+            loadMyStories().then(displayStories);
         }).catch(console.log());
 }
 

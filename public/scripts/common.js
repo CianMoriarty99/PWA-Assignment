@@ -9,16 +9,6 @@ const status = async (response) => {
     }
 }
 
-const getImages = async (story) => {
-    story.storyImages = story.storyImages.map(async s => {    
-        const url = `/images/${s}`
-        return await fetch(url)
-            .then(r => r.blob())
-    });
-    story.storyImages = await Promise.all(story.storyImages);
-    return story;
-}
-
 
 const generateStoryElement = (story) => {
     const result = document.createElement("div");

@@ -13,8 +13,9 @@ const getAllStories = () => {
         .then(status)
         .then(r => r.json())
         .then(async allStories => {
-            await deleteAllStories();
-            displayStories(await Promise.all(allStories.map(element => getImages(element).then(saveStory))));
+            // await deleteAllStories();
+            await Promise.all(allStories.map(saveStory));
+            loadAllStories().then(displayStories);
         }).catch(console.log())
 }
 
@@ -64,7 +65,6 @@ document.getElementById('uploadStory').addEventListener('click', () => {
         saveStory(response);	
         // document.location.href = '/';
     }).catch(err => {
-        uploadResult.innerHTML = err;
         const errorMessage = document.createElement('p');
         errorMessage.textContent = err;
         errors.appendChild(errorMessage);
