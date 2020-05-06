@@ -86,7 +86,7 @@ const owns_story = async (req, res, next) => {
 }
 
 const story_exists = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.body.storyId;
     console.log(`id = ${id}`);
     if (!id) {
         res.status(403)
@@ -111,7 +111,8 @@ const story_exists = async (req, res, next) => {
 }
 
 const valid_vote = (req, res, next) => {
-    const vote = req.params.vote;
+    const vote = req.body.vote;
+    console.log(`id = ${vote}`);
     if (!vote || !/[1-5]/.exec(vote)) {
         res.status(400).send('Votes must be numeric and 1-5');
     }

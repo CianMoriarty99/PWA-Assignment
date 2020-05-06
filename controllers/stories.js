@@ -55,6 +55,7 @@ exports.delete = async (req, res) => {
 }
 
 exports.vote = async (req, res) => {
+    console.log("VOTINGGGGGGGGGGGGGGG")
     const vote = req.vote;
     const id = req.id;
     const story = req.story;
@@ -62,7 +63,7 @@ exports.vote = async (req, res) => {
 
     const voteRecord = await Vote.findOne({ author: username, storyId: id });
     console.log(voteRecord);
-    if (voteRecord) {
+    if (!!voteRecord) {
         const difference = vote - voteRecord.value;
         if (difference !== 0) {
             await Promise.all([
@@ -80,7 +81,6 @@ exports.vote = async (req, res) => {
         };
         res.status(200)
             .json({ message: `voted ${voteRecord.value}`});
-        return;
     }
     else {
         await Promise.all([
@@ -91,6 +91,15 @@ exports.vote = async (req, res) => {
                 { upsert: true, new: true, setDefaultsOnInsert: true }
             )
         ]);
+        res.status(200)
+            .json({ message: `voted ${vote}`});
+        console.log("How long I have awaited this moment")
+    }
+
+    try {
+        socket.sendNewPostAlert();
+    } catch (e){
+        console.log("Socket trouble: " + e.message);
     }
 }
 

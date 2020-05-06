@@ -32,7 +32,7 @@ router.get('/myStories', logged_in, storyController.myStories);
 
 router.post('/', logged_in, upload.array('images', 3), storyController.upload);
 
-router.get('/vote/:id/:vote', logged_in, story_exists, valid_vote, storyController.vote);
+router.post('/vote', logged_in, story_exists, valid_vote, storyController.vote);
 
 
 module.exports = router;

@@ -35,12 +35,38 @@ const generateStoryElement = (story) => {
     const score = document.createElement("p");
     score.innerText = `Score: ${story.voteSum / (story.voteCount || 1)}/5, ${story.voteCount} votes total`;
 
+    const voteButtons = document.createElement("span");
+
+    for (i = 1; i <= 5; i++){
+        const button = document.createElement("button");
+        button.innerText = i;
+        const j = i;
+        
+        button.addEventListener('click', () => {
+            const vote = { vote: j , storyId: story.id };
+            const url = "/stories/vote/"
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(vote)
+            }
+            
+            fetch(url, options)
+                .then(console.log)
+                .catch(e => uploadVoteLater(vote))
+        });
+
+        voteButtons.appendChild(button);
+    }
+
+
     result.appendChild(author);
     result.appendChild(message);
     result.appendChild(images);
     result.appendChild(date);
     result.appendChild(time);
     result.appendChild(score);
+    result.appendChild(voteButtons);
 
     if(story.deletable){
         const deleteButton = document.createElement("button");
@@ -91,11 +117,11 @@ window.addEventListener('load', () => {
         await initDbPromise();
         const toUpload = await getToUploadStories();
         Promise.allSettled(
-            toUpload.map(e => {
+            toUpload.map(story => {
                 const formdata = new FormData();
-                formdata.append('author', e.author);
-                formdata.append('storyText', e.storyText);
-                for (let image of e.storyImages) {
+                formdata.append('author', story.author);
+                formdata.append('storyText', story.storyText);
+                for (let image of story.storyImages) {
                     formdata.append('images', image);
                 }
     
@@ -105,9 +131,33 @@ window.addEventListener('load', () => {
                 }).then(status)
                     .then(response => response.json())
                     .then(response => {
-                        response.storyImages = e.storyImages;
+                        response.storyImages = story.storyImages;
                         saveStory(response);
-                        successfullyUploaded(e.id);
+                        successfullyUploadedStory(story.id);
+                    }).catch(err => {
+                        console.log(err);
+                    });
+            })
+        );
+    })();
+
+    (async () => {
+        await initDbPromise();
+        const toUpload = await getToUploadVotes();
+        Promise.allSettled(
+            toUpload.map(vote => {
+                const url = "/stories/vote/"
+                const options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(vote)
+                }
+    
+                return fetch(url, options)
+                    .then(status)
+                    .then(response => response.json())
+                    .then(response => {
+                        successfullyUploadedVote(vote.storyId);
                     }).catch(err => {
                         console.log(err);
                     });

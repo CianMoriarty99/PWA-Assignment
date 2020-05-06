@@ -66,7 +66,7 @@ document.getElementById('uploadStory').addEventListener('click', () => {
         const errorMessage = document.createElement('p');
         errorMessage.textContent = err;
         errors.appendChild(errorMessage);
-        uploadLater(newStory);	
+        uploadStoryLater(newStory);	
     });	
 });
 

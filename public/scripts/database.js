@@ -3,7 +3,8 @@ let dbPromise;
 const DB_NAME = 'stories_db';
 // const ALL_STORIES_STORE = 'allStories';
 // const MY_STORIES_STORE = 'myStories';
-const TO_UPLOAD_STORE = 'toUpload';
+const STORY_TO_UPLOAD_STORE = 'storyToUpload';
+const VOTE_TO_UPLOAD_STORE = 'voteToUpload';
 
 const STORIES_STORE  = 'stories';
 const IMAGES_STORE = 'images';
@@ -39,10 +40,15 @@ const initDb = () => {
             upgradeDb.createObjectStore(DATA_STORE, { keyPath: 'type' });
         }
 
-        if (!upgradeDb.objectStoreNames.contains(TO_UPLOAD_STORE)) {
-            const storiesDb = upgradeDb.createObjectStore(TO_UPLOAD_STORE, { keyPath: 'id', autoIncrement: true });
-            storiesDb.createIndex('author', 'author', { unique: false, multiEntry: true });
+        if (!upgradeDb.objectStoreNames.contains(STORY_TO_UPLOAD_STORE)) {
+            upgradeDb.createObjectStore(STORY_TO_UPLOAD_STORE, { keyPath: 'id', autoIncrement: true });
         }
+
+        if (!upgradeDb.objectStoreNames.contains(VOTE_TO_UPLOAD_STORE)) {
+            upgradeDb.createObjectStore(VOTE_TO_UPLOAD_STORE, { keyPath: 'storyId', autoIncrement: true });
+        }
+
+
     });
 }
 
@@ -169,33 +175,56 @@ const deleteAllMyStories = async () => {
     });
 }
 
-const addToUploadList = (story) => {
-    let currentCache = localStorage.getItem('toUpload') || [];
-    currentCache.push(story);
-    localStorage.setItem('toUpload', currentCache);
-}
 
-const uploadLater = (story) => {
+const uploadStoryLater = (story) => {
     dbPromise.then(async db => {
-        const trans = db.transaction(TO_UPLOAD_STORE, 'readwrite');
-        const store = trans.objectStore(TO_UPLOAD_STORE);
+        const trans = db.transaction(STORY_TO_UPLOAD_STORE, 'readwrite');
+        const store = trans.objectStore(STORY_TO_UPLOAD_STORE);
         await store.add(story);
         return trans.complete;
     });
 }
 
+const uploadVoteLater = (vote) => {
+    dbPromise.then(async db => {
+        const trans = db.transaction(VOTE_TO_UPLOAD_STORE, 'readwrite');
+        const store = trans.objectStore(VOTE_TO_UPLOAD_STORE);
+        await store.put(vote);
+        return trans.complete;
+    });
+}
+
+
+
 const getToUploadStories = async () => {
     return await dbPromise.then(async db => {
-        const trans = db.transaction(TO_UPLOAD_STORE, 'readonly');
-        const store = trans.objectStore(TO_UPLOAD_STORE);
+        const trans = db.transaction(STORY_TO_UPLOAD_STORE, 'readonly');
+        const store = trans.objectStore(STORY_TO_UPLOAD_STORE);
         return store.getAll();
     });
 }
 
-const successfullyUploaded = async (id) => {
+const getToUploadVotes = async () => {
     return await dbPromise.then(async db => {
-        const trans = db.transaction(TO_UPLOAD_STORE, 'readwrite');
-        const store = trans.objectStore(TO_UPLOAD_STORE);
+        const trans = db.transaction(VOTE_TO_UPLOAD_STORE, 'readonly');
+        const store = trans.objectStore(VOTE_TO_UPLOAD_STORE);
+        return store.getAll();
+    });
+}
+
+const successfullyUploadedStory = async (id) => {
+    return await dbPromise.then(async db => {
+        const trans = db.transaction(STORY_TO_UPLOAD_STORE, 'readwrite');
+        const store = trans.objectStore(STORY_TO_UPLOAD_STORE);
+        await store.delete(id);
+        return trans.complete;
+    });
+}
+
+const successfullyUploadedVote = async (id) => {
+    return await dbPromise.then(async db => {
+        const trans = db.transaction(VOTE_TO_UPLOAD_STORE, 'readwrite');
+        const store = trans.objectStore(VOTE_TO_UPLOAD_STORE);
         await store.delete(id);
         return trans.complete;
     });
