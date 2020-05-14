@@ -79,7 +79,6 @@ exports.vote = async (req, res) => {
     const username = req.username;
 
     const voteRecord = await Vote.findOne({ author: username, storyId: id });
-    console.log(voteRecord);
     if (!!voteRecord) {
         const difference = vote - voteRecord.value;
         if (difference !== 0) {

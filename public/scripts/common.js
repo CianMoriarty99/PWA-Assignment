@@ -34,7 +34,8 @@ const generateStoryElement = (story) => {
     time.innerText = story.time;
 
     const score = document.createElement("p");
-    score.innerText = `Score: ${story.voteSum / (story.voteCount || 1)}/5, ${story.voteCount} votes total`;
+    const scoreNumber = '' + (story.voteSum / (story.voteCount || 1));
+    score.innerText = `Score: ${scoreNumber.slice(0, 4)}/5, ${story.voteCount} votes total`;
 
     const voteButtons = document.createElement("span");
 
