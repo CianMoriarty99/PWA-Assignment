@@ -2,6 +2,7 @@ const storyImageUpload = document.getElementById("images");
 const storyTextBox = document.getElementById("storyText");
 
 const errors = document.getElementById("storyErrors");
+const sortModeSelector = document.getElementById("sortmode");
 
 const allLoaded = async () => {
     loadAllStories().then(displayStories);
@@ -69,5 +70,11 @@ document.getElementById('uploadStory').addEventListener('click', () => {
         uploadStoryLater(newStory);	
     });	
 });
+
+sortModeSelector.onchange = () => {
+    sortMode = sortModeSelector.options[sortModeSelector.selectedIndex].value;
+    loadAllStories().then(displayStories);
+    console.log(sortMode);
+}
 
 window.addEventListener('load', allLoaded, false);

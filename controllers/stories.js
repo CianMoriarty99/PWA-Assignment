@@ -3,16 +3,33 @@ const fs = require('fs')
 const Story = require('../models/stories');
 const Vote = require('../models/votes');
 const socket = require("../socket.io/socket-io");
-
+const Ranking = require('../CollectiveIntelligence/Ranking');
 
 exports.getStories = async (req, res) => {
     try {
         const stories = await Story.find({});
+        const votes = await Vote.find({});
+        const uniqueAuthors = await Vote.distinct('author');
+
+        const votePrefs = {};
+
+        uniqueAuthors.forEach(auth => {
+            let votesForAuthor = votes.filter(obj => obj.author == auth);
+            let testArray = votesForAuthor.map(row => ({[row.storyId]: row.value}));
+
+            votePrefs[auth] = testArray;
+        })
+
+        const recommendedScores = {};
+        new Ranking().getRecommendScores(votePrefs, req.username, 'sim_pearson').forEach(row => recommendedScores[row.story] = row.score);
+
         const fixedStories = stories.map(s => {
             const result = s.clean();
             result.deletable = (req.username && s.author == req.username);
+            result.recommendScore = recommendedScores[s.id] || 0;
             return result;
         });
+
         res.json(fixedStories);
     } catch (e) {
         console.log(e);

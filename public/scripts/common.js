@@ -1,5 +1,6 @@
 const storiesDiv = document.getElementById('stories');
 const navbar = document.getElementById('navbar');
+let sortMode = "date";
 
 const status = async (response) => {
     if (response.status >= 200 && response.status < 300) {
@@ -101,12 +102,22 @@ const displayStories = (stories) => {
 }
 
 const sortStories = stories => {
-    stories.sort((a, b) => {
-        if (a.date === b.date) {
-            return a.time > b.time ? -1 : 1
-        }
-        return a.date > b.date ? -1 : 1;
-    });
+    if (sortMode == "date"){
+        stories.sort((a, b) => {
+            if (a.date === b.date) {
+                return a.time > b.time ? -1 : 1
+            }
+            return a.date > b.date ? -1 : 1;
+        });
+    } else {
+        stories.sort((a, b) => {
+            if (a.recommendScore !== b.recommendScore){
+                return a.recommendScore > b.recommendScore ? -1 : 1;
+            }
+
+            return a.date > b.date ? -1 : 1;
+        });
+    }
 }
 
 
