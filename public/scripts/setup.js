@@ -10,5 +10,4 @@ Promise.allSettled(
         };
     }),
     new Promise(initDbPromise)]
-);
-// ).then(() => location.reload());
+).then(() => location.reload());
