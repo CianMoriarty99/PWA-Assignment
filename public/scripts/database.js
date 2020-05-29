@@ -25,6 +25,9 @@ const initDbPromise = (resolve) => {
 //     contents: []
 // }
 
+/*
+ * Initializes the idb on users browser, adds Object stores if none are found
+ */
 const initDb = () => {
     dbPromise = idb.openDb(DB_NAME, 1, (upgradeDb) => {
         if (!upgradeDb.objectStoreNames.contains(STORIES_STORE)) {
@@ -50,6 +53,10 @@ const initDb = () => {
     });
 }
 
+/*
+ * Returns images stored in idb
+ * @param filename - The filename of the image within idb
+ */
 const getImage = async (filename) => {
     const image = await dbPromise.then(async db => {
         const imageTrans = db.transaction(IMAGES_STORE, 'readonly');
@@ -59,6 +66,10 @@ const getImage = async (filename) => {
     return image.contents;
 }
 
+/*
+ * Returns specified story from the the idb with any related images
+ * @param storyId - The id of the story
+ */
 const getStory = async (storyId) => {
     const story = await dbPromise.then(async db => {
         const storyTrans = db.transaction(STORIES_STORE, 'readonly');
@@ -69,6 +80,9 @@ const getStory = async (storyId) => {
     return story;
 }
 
+/*
+ * Returns all stories that are stored within the idb and their related images
+ */
 const loadAllStories = async () => {
     return await dbPromise.then(async db => {
         const dataTrans = db.transaction(STORIES_STORE, 'readonly');
@@ -81,6 +95,9 @@ const loadAllStories = async () => {
     });
 }
 
+/*
+ * Returns all stories uploaded by the logged in user from the idb
+ */
 const loadMyStories = async () => {
     return await dbPromise.then(async db => {
         const dataTrans = db.transaction(DATA_STORE, 'readonly');
@@ -90,6 +107,10 @@ const loadMyStories = async () => {
     });
 }
 
+/*
+ * Fetches an image from the server
+ * @param im - The filename of the image
+ */
 const getImageFile = async (im) => {
     const url = `/images/${im}`;
     const blob = await fetch(url)
@@ -101,6 +122,10 @@ const getImageFile = async (im) => {
     }
 }
 
+/*
+ * Stores all stories uploaded by the logged in user in the idb
+ * @param allStories - An array of all stories available to the user
+ */
 const storeMyStories = async (allStories) => {
     allStories.forEach(story => {
         saveStory(story);
@@ -117,6 +142,10 @@ const storeMyStories = async (allStories) => {
     });
 }
 
+/*
+ * Saves a story on the users idb
+ * @param story - The story to save
+ */
 const saveStory = async (story) => {
     await dbPromise.then(async db => {
         const trans = db.transaction(STORIES_STORE, 'readwrite');
@@ -131,6 +160,10 @@ const saveStory = async (story) => {
     return story;
 }
 
+/*
+ * Saves an image within the idb Image Store
+ * @param image - The image to save
+ */
 const saveImage = async (image) => {
     await dbPromise.then(async db => {
         const trans = db.transaction(IMAGES_STORE, 'readwrite');
@@ -148,8 +181,6 @@ const deleteStory = async (id) => {
         return trans.complete;
     });
 }
-
-// const updateAllStories = 
 
 const deleteAllStories = async () => {
     dbPromise.then(async db => {
@@ -173,7 +204,10 @@ const deleteAllMyStories = async () => {
     });
 }
 
-
+/*
+ * Adds a story to idb storage to be uploaded at a later time
+ * @param story - The story to be added
+ */
 const uploadStoryLater = (story) => {
     dbPromise.then(async db => {
         const trans = db.transaction(STORY_TO_UPLOAD_STORE, 'readwrite');
@@ -183,6 +217,10 @@ const uploadStoryLater = (story) => {
     });
 }
 
+/*
+ * Adds a vote to idb storage to be uploaded at a later time
+ * @param vote - The vote to be added
+ */
 const uploadVoteLater = (vote) => {
     dbPromise.then(async db => {
         const trans = db.transaction(VOTE_TO_UPLOAD_STORE, 'readwrite');
@@ -192,8 +230,9 @@ const uploadVoteLater = (vote) => {
     });
 }
 
-
-
+/*
+ * Returns all stories stored within the upload later idb store
+ */
 const getToUploadStories = async () => {
     return await dbPromise.then(async db => {
         const trans = db.transaction(STORY_TO_UPLOAD_STORE, 'readonly');
@@ -202,6 +241,9 @@ const getToUploadStories = async () => {
     });
 }
 
+/*
+ * Returns all votes stored within the upload later idb store
+ */
 const getToUploadVotes = async () => {
     return await dbPromise.then(async db => {
         const trans = db.transaction(VOTE_TO_UPLOAD_STORE, 'readonly');
@@ -210,6 +252,10 @@ const getToUploadVotes = async () => {
     });
 }
 
+/*
+ * Removes a story which has been successfully uploaded to the server from the idb upload later store
+ * @param id - The id of the story to be removed
+ */
 const successfullyUploadedStory = async (id) => {
     return await dbPromise.then(async db => {
         const trans = db.transaction(STORY_TO_UPLOAD_STORE, 'readwrite');
@@ -219,6 +265,10 @@ const successfullyUploadedStory = async (id) => {
     });
 }
 
+/*
+ * Removes a vote which has been successfully uploaded to the server from the idb upload later store
+ * @param id - The id of the story to be removed
+ */
 const successfullyUploadedVote = async (id) => {
     return await dbPromise.then(async db => {
         const trans = db.transaction(VOTE_TO_UPLOAD_STORE, 'readwrite');
@@ -228,6 +278,10 @@ const successfullyUploadedVote = async (id) => {
     });
 }
 
+/*
+ * Adds the username of the logged in user to the idb storage
+ * @param username - The username to be stored
+ */
 const putUsername = async (username) => {
     dbPromise.then(async db => {
         const trans = db.transaction(DATA_STORE, 'readwrite');
@@ -237,6 +291,9 @@ const putUsername = async (username) => {
     });
 }
 
+/*
+ * Retrieves the username from the idb if one is present, returns undefined if not
+ */
 const getUsername = async () => {
     return await dbPromise.then(async db => {
         const trans = db.transaction(DATA_STORE, 'readonly');

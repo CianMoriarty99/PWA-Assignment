@@ -5,11 +5,17 @@ const storyTitle = document.getElementById("storyTitle");
 const errors = document.getElementById("storyErrors");
 const sortModeSelector = document.getElementById("sortmode");
 
+/*
+ * Get all stories from idb and waits for result before displaying them, then attempts to fetch from server
+ */
 const allLoaded = async () => {
     loadAllStories().then(displayStories);
     getAllStories();
 };
 
+/*
+ * Fetches all stories from the server and saves them to idb
+ */
 const getAllStories = () => {
     return fetch('/stories')
         .then(status)
@@ -20,6 +26,7 @@ const getAllStories = () => {
         }).catch(console.log())
 }
 
+// Attempts to create socket connection, registers event handler for a new story post
 try {
     const socket = io();
     socket.on("NewStoryPost", () => {
@@ -30,6 +37,9 @@ catch (err) {
     console.log(err);
 }
 
+/*
+ * Registers onClick event for the uploadStory button
+ */
 document.getElementById('uploadStory').addEventListener('click', () => {
     const storyTitle = storyTitle.value.trim()
     const storyText = storyTextBox.value.trim();
@@ -37,6 +47,7 @@ document.getElementById('uploadStory').addEventListener('click', () => {
 
     let validationErrors = false;
 
+    // Checks the storyTitle is valid, displays an error if not
     if (!validStory(storyTitle)) {
         const errorMessage = document.createElement('p');
         errorMessage.textContent = "Title must be between 1 and 100 characters";
@@ -44,6 +55,7 @@ document.getElementById('uploadStory').addEventListener('click', () => {
         validationErrors = true;
     }
 
+    // Checks the storyText is valid, displays an error if not
     if (!validStory(storyText)) {
         const errorMessage = document.createElement('p');
         errorMessage.textContent = "Story must be between 1 and 150 characters";
@@ -58,20 +70,24 @@ document.getElementById('uploadStory').addEventListener('click', () => {
         'storyText': storyText	
     };	
 
+    // Creates a FormData object for the uploaded story and appends its contents
     const formdata = new FormData();	
     formdata.append('storyText', storyText);	
     for (let image of images) {	
         formdata.append('images', image);	
     }	
 
+    // Creates a POST request for the story FormData object
     fetch('/stories', {	
         method: 'POST',	
         body: formdata,	
     }).then(status)	
     .then(response => response.json())
-    .then(response => {	
+    .then(response => {
+        // If the user is connected, the story is saved on idb
         saveStory(response);	
     }).catch(err => {
+        // If the upload fails then show error and add story to upload later queue
         const errorMessage = document.createElement('p');
         errorMessage.textContent = err;
         errors.appendChild(errorMessage);
@@ -79,6 +95,10 @@ document.getElementById('uploadStory').addEventListener('click', () => {
     });	
 });
 
+/*
+ * Event handler for when sortMode button is pressed
+ * Updates sortmode and refreshes the stories
+ */
 sortModeSelector.onchange = () => {
     sortMode = sortModeSelector.options[sortModeSelector.selectedIndex].value;
     loadAllStories().then(displayStories);
