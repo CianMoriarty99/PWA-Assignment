@@ -170,6 +170,7 @@ window.addEventListener('load', async () => {
                 const formdata = new FormData();
                 formdata.append('author', story.author);
                 formdata.append('storyText', story.storyText);
+                formdata.append('storyTitle', story.storyTitleText);
                 for (let image of story.storyImages) {
                     formdata.append('images', image);
                 }
