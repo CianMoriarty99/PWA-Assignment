@@ -122,8 +122,20 @@ const sortStories = stories => {
 }
 
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     initDb();
+
+    const li = fetch('li')
+        .then(status)
+        .then(res => res.text())
+        .then(putUsername)
+        .catch(() => {});
+    const lo = fetch('lo')
+        .then(status)
+        .then(() => putUsername(undefined))
+        .catch(() => {});
+
+    await Promise.all([li, lo]);
 
     (async () => {
         await initDbPromise();
@@ -177,33 +189,34 @@ window.addEventListener('load', () => {
         );
     })();
 
-    fetch('/li')
-        .then(status)
-        .then(res => res.text())
+    getUsername()
         .then(username => {
-            const myStories = document.createElement('a');
-            myStories.href = '/me';
-            myStories.innerHTML = 'My Stories';
-
-            const usernameField = document.createElement('span');
-            usernameField.innerHTML = username;
-
-            const logoutOption = document.createElement('a');
-            logoutOption.href = '/logout';
-            logoutOption.innerHTML = 'Logout';
-
-            navbar.appendChild(myStories);
-            navbar.appendChild(usernameField);
-            navbar.appendChild(logoutOption);
-        }).catch(() => {
-            const loginOption = document.createElement('a');
-            loginOption.href = '/login';
-            loginOption.innerHTML = 'Login';
-            const registerOption = document.createElement('a');
-            registerOption.href = '/register';
-            registerOption.innerHTML = 'Register';
-
-            navbar.appendChild(loginOption);
-            navbar.appendChild(registerOption);
+            if (username) {
+                const myStories = document.createElement('a');
+                myStories.href = '/me';
+                myStories.innerHTML = 'My Stories';
+    
+                const usernameField = document.createElement('span');
+                usernameField.innerHTML = username;
+    
+                const logoutOption = document.createElement('a');
+                logoutOption.href = '/logout';
+                logoutOption.innerHTML = 'Logout';
+    
+                navbar.appendChild(myStories);
+                navbar.appendChild(usernameField);
+                navbar.appendChild(logoutOption);
+            }
+            else {
+                const loginOption = document.createElement('a');
+                loginOption.href = '/login';
+                loginOption.innerHTML = 'Login';
+                const registerOption = document.createElement('a');
+                registerOption.href = '/register';
+                registerOption.innerHTML = 'Register';
+    
+                navbar.appendChild(loginOption);
+                navbar.appendChild(registerOption);
+            }
         });
 }, false);

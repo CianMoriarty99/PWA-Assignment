@@ -227,3 +227,21 @@ const successfullyUploadedVote = async (id) => {
         return trans.complete;
     });
 }
+
+const putUsername = async (username) => {
+    dbPromise.then(async db => {
+        const trans = db.transaction(DATA_STORE, 'readwrite');
+        const store = trans.objectStore(DATA_STORE);
+        await store.put({ type: 'username', username });
+        return trans.complete;
+    });
+}
+
+const getUsername = async () => {
+    return await dbPromise.then(async db => {
+        const trans = db.transaction(DATA_STORE, 'readonly');
+        const store = trans.objectStore(DATA_STORE);
+        const usernameRecord = await store.get('username') || { username: undefined };
+        return usernameRecord.username;
+    });
+}
