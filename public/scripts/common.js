@@ -8,6 +8,10 @@ let storiesToDisplay = [];
 
 let userUsername;
 
+/*
+ * Returns the Promise.resolve or Promise.reject depending on the status code
+ * @param response - The response to check
+ */
 const status = async (response) => {
     if (response.status >= 200 && response.status < 300) {
         return Promise.resolve(response);
@@ -16,6 +20,10 @@ const status = async (response) => {
     }
 }
 
+/*
+ * Generates HTML elements needed to display a story
+ * @param story - The story object to display
+ */
 const generateStoryElement = (story) => {
     const result = document.createElement("div");
     result.classList.add('story');
@@ -31,28 +39,34 @@ const generateStoryElement = (story) => {
     message.innerText = story.storyText;
 
     const images = document.createElement("span");
+
+    // Creates img elements for the stories images
     for (let image of story.storyImages) {
         const img = document.createElement("img");
         img.src = URL.createObjectURL(image);
         images.appendChild(img);
     }
+
     const date = document.createElement("p");
     date.innerText = story.date;
 
     const time = document.createElement("p");
     time.innerText = story.time;
 
+    // Calculates the average score for a stories votes
     const score = document.createElement("p");
     const scoreNumber = '' + (story.voteSum / (story.voteCount || 1));
     score.innerText = `Score: ${scoreNumber.slice(0, 4)}/5, ${story.voteCount} votes total`;
 
     const voteButtons = document.createElement("span");
 
+    // Creates 5 buttons for users to vote on stories
     for (i = 1; i <= 5; i++){
         const button = document.createElement("button");
         button.innerText = i;
         const j = i;
         
+        // Event listener for a vote button, creates a POST request when button is pressed
         button.addEventListener('click', () => {
             const vote = { vote: j , storyId: story.id };
             const url = "/stories/vote/"
@@ -79,6 +93,7 @@ const generateStoryElement = (story) => {
     result.appendChild(score);
     result.appendChild(voteButtons);
 
+    // Creates delete button if the story belongs to the signed in user
     if(story.author == userUsername){
         const deleteButton = document.createElement("button");
         deleteButton.innerText = "Delete";
@@ -169,6 +184,7 @@ window.addEventListener('load', async () => {
             toUpload.map(story => {
                 const formdata = new FormData();
                 formdata.append('author', story.author);
+                formdata.append('storyTitle', story.storyTitleText);
                 formdata.append('storyText', story.storyText);
                 for (let image of story.storyImages) {
                     formdata.append('images', image);

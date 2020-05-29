@@ -89,6 +89,7 @@ const storyExists = async (req, res, next) => {
     const id = req.body.storyId;
     console.log(`id = ${id}`);
     if (!id) {
+        console.log('invalid id');
         res.status(403)
             .send("Missing ID field");
         return;
@@ -100,11 +101,13 @@ const storyExists = async (req, res, next) => {
             req.story = story;
             next();
         } else {
+            console.log('doesnnt exist');
             res.status(403)
                 .send("Story doesn't exist");
         }  
     }
     catch(e) {
+        console.log('?');
         res.status(403)
             .send("????????");
     }

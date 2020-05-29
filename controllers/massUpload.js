@@ -29,10 +29,10 @@ exports.massUpload = async (req, res) => {
     const hashed = await bcrypt.hash('password', saltRounds);
 
     for (const user of users){
-        userPromises.push(User.create({ 
+        userPromises.push(new User({ 
             username: user.userId,
             password: hashed 
-        }));
+        }).save());
     }
 
     await Promise.all(userPromises);
@@ -40,7 +40,7 @@ exports.massUpload = async (req, res) => {
     const storyPromises = [];
 
     for (const story of stories) {
-        storyPromises.push(Story.create({
+        storyPromises.push(new Story({
             author: story.userId,
             date: "hello",
             time: "hello",
@@ -49,7 +49,7 @@ exports.massUpload = async (req, res) => {
             storyImages: [],
             voteCount: 0,
             voteSum: 0
-        }));
+        }).save());
     }
     
     await Promise.all(storyPromises);

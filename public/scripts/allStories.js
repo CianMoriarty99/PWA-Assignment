@@ -31,13 +31,13 @@ catch (err) {
 }
 
 document.getElementById('uploadStory').addEventListener('click', () => {
-    const storyTitle = storyTitle.value.trim()
+    const storyTitleText = storyTitle.value.trim()
     const storyText = storyTextBox.value.trim();
     const images = Array.from(storyImageUpload.files);		
 
     let validationErrors = false;
 
-    if (!validStory(storyTitle)) {
+    if (!validStory(storyTitleText)) {
         const errorMessage = document.createElement('p');
         errorMessage.textContent = "Title must be between 1 and 100 characters";
         errors.appendChild(errorMessage);
@@ -55,10 +55,12 @@ document.getElementById('uploadStory').addEventListener('click', () => {
 
     const newStory = {		
         'storyImages': images,	
+        'storyTitleText': storyTitleText,
         'storyText': storyText	
     };	
 
     const formdata = new FormData();	
+    formdata.append('storyTitle', storyTitleText);	
     formdata.append('storyText', storyText);	
     for (let image of images) {	
         formdata.append('images', image);	
