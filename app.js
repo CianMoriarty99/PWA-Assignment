@@ -7,7 +7,7 @@ const multer = require('multer');
 
 const indexRouter = require('./routes/index');
 const storyRouter = require('./routes/stories');
-const { logged_in, logged_out } = require('./utils')
+const { loggedIn, loggedOut } = require('./utils')
 const users = require('./controllers/users');
 const massUpload = require('./controllers/massUpload');
 
@@ -35,9 +35,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/li', logged_in , (req, res) => res.send(req.username));
+app.get('/li', loggedIn , (req, res) => res.send(req.username));
 
-app.get('/lo', logged_out , (req, res) => res.send("user logged out"));
+app.get('/lo', loggedOut , (req, res) => res.send("user logged out"));
 
 app.get('/register', (req, res) => res.render('register.ejs'));
 

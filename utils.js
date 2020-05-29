@@ -4,7 +4,7 @@ const { secret } = require('./private');
 
 const Story = require('./models/stories')
 
-const logged_in = async (req, res, next) => {
+const loggedIn = async (req, res, next) => {
     const token = req.cookies.token;
     if (token) {
         try {
@@ -26,7 +26,7 @@ const logged_in = async (req, res, next) => {
     }
 }
 
-const optional_logged_in = async (req,res,next) => {
+const optionalLoggedIn = async (req,res,next) => {
     const token = req.cookies.token;
     if (token) {
         try {
@@ -44,7 +44,7 @@ const optional_logged_in = async (req,res,next) => {
     }
 }
 
-const logged_out = (req, res, next) => {
+const loggedOut = (req, res, next) => {
     const token = req.cookies.token;
     if (token) {
         try {
@@ -62,7 +62,7 @@ const logged_out = (req, res, next) => {
     }
 }
 
-const owns_story = async (req, res, next) => {
+const ownsStory = async (req, res, next) => {
     const id = req.body.id;
     if (!id) {
         res.status(403)
@@ -85,7 +85,7 @@ const owns_story = async (req, res, next) => {
     }
 }
 
-const story_exists = async (req, res, next) => {
+const storyExists = async (req, res, next) => {
     const id = req.body.storyId;
     console.log(`id = ${id}`);
     if (!id) {
@@ -110,7 +110,7 @@ const story_exists = async (req, res, next) => {
     }
 }
 
-const valid_vote = (req, res, next) => {
+const validVote = (req, res, next) => {
     const vote = req.body.vote;
     console.log(`id = ${vote}`);
     if (!vote || !/[1-5]/.exec(vote)) {
@@ -121,9 +121,9 @@ const valid_vote = (req, res, next) => {
 }
 
 
-exports.logged_in = logged_in;
-exports.logged_out = logged_out
-exports.optional_logged_in = optional_logged_in
-exports.owns_story = owns_story
-exports.story_exists = story_exists
-exports.valid_vote = valid_vote
+exports.loggedIn = loggedIn;
+exports.loggedOut = loggedOut
+exports.optionalLoggedIn = optionalLoggedIn
+exports.ownsStory = ownsStory
+exports.storyExists = storyExists
+exports.validVote = validVote

@@ -22,3 +22,8 @@ img {
 #navbar * {
   margin-right: 10px;
 }
+
+#navbar {
+  padding: 20px;
+  background-color: green;
+}

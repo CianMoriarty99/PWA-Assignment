@@ -1,6 +1,6 @@
-const cache_name = 'pwa_stories';
+const cacheName = 'pwa_stories';
 
-const cache_urls = new Set([
+const cacheUrls = new Set([
     '/stylesheets/style.css',
     '/scripts/idb.js',
     '/scripts/database.js',
@@ -10,7 +10,7 @@ const cache_urls = new Set([
     '/scripts/myStories.js',
 ]);
 
-const cache_first = {
+const cacheFirst = {
     '/': '/pages/allStories.html',
     '/me': '/pages/myStories.html',
 };
@@ -18,9 +18,9 @@ const cache_first = {
 self.addEventListener('install', event => {
     console.log('installing service worker');
     event.waitUntil(
-        caches.open(cache_name).then(cache => {
-            const toCache = Array.from(cache_urls);
-            Object.values(cache_first).forEach(v => toCache.push(v));
+        caches.open(cacheName).then(cache => {
+            const toCache = Array.from(cacheUrls);
+            Object.values(cacheFirst).forEach(v => toCache.push(v));
             console.log('building cache');
             return cache.addAll(toCache);
 
@@ -33,7 +33,7 @@ self.addEventListener('activate', event => {
     event.waitUntil(cacheNames => {
        return Promise.all(
            cacheNames.map(cacheName => {
-               if (cache_urls.index(cacheName) === -1) {
+               if (cacheUrls.index(cacheName) === -1) {
                 return caches.delete(cacheName);
                }
            })
@@ -44,15 +44,15 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
     const dest = new URL(event.request.url).pathname;
-    if (dest in cache_first) {
+    if (dest in cacheFirst) {
         event.respondWith(
-            caches.match(cache_first[dest]).then(response => {
-                    return response || fetch(cache_first[dest]);
+            caches.match(cacheFirst[dest]).then(response => {
+                    return response || fetch(cacheFirst[dest]);
             })
         )
     }
     
-    else if (cache_urls.has(dest)) {
+    else if (cacheUrls.has(dest)) {
         event.respondWith(
             caches.match(dest)
                 .catch(() => {

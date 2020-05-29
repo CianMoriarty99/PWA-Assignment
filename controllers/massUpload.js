@@ -25,22 +25,22 @@ exports.massUpload = async (req, res) => {
 
     // repopulate
 
-    const user_promises = [];
+    const userPromises = [];
     const hashed = await bcrypt.hash('password', saltRounds);
 
     for (const user of users){
-        user_promises.push(User.create({ 
-            user_name: user.userId,
+        userPromises.push(User.create({ 
+            username: user.userId,
             password: hashed 
         }));
     }
 
-    await Promise.all(user_promises);
+    await Promise.all(userPromises);
 
-    const story_promises = [];
+    const storyPromises = [];
 
     for (const story of stories) {
-        story_promises.push(Story.create({
+        storyPromises.push(Story.create({
             author: story.userId,
             date: "hello",
             time: "hello",
@@ -52,49 +52,48 @@ exports.massUpload = async (req, res) => {
         }));
     }
     
-    await Promise.all(story_promises);
+    await Promise.all(storyPromises);
 
-    const vote_promises = [];
-    const story_to_id = {};
-    const id_to_update_vals = {};
+    const votePromises = [];
+    const storyToId = {};
+    const idToUpdateVals = {};
 
     for (const user of users) {
         for (const rating of user.ratings) {
-            const story_name = rating.storyId;
-            let story_id = story_to_id[story_name];
-            if (!story_id) {
-                const story = await Story.findOne({ storyTitle: story_name });
-                story_to_id[story_name] = story._id;
-                story_id = story._id;
+            const storyName = rating.storyId;
+            let storyId = storyToId[storyName];
+            if (!storyId) {
+                const story = await Story.findOne({ storyTitle: storyName });
+                storyToId[storyName] = story._id;
+                storyId = story._id;
             }
-            vote_promises.push(Vote.create({
+            votePromises.push(Vote.create({
                 author: user.userId,
-                storyId: story_id,
+                storyId: storyId,
                 value: rating.rating
             }));
 
-
-            const story = id_to_update_vals[story_id] || { total: 0, count: 0};
+            const story = idToUpdateVals[storyId] || { total: 0, count: 0};
             story.total += rating.rating;
             story.count++;
-            id_to_update_vals[story_id] = story;
+            idToUpdateVals[storyId] = story;
         }
     }
 
-    await Promise.all(vote_promises);
+    await Promise.all(votePromises);
 
-    const story_updates = [];
+    const storyUpdates = [];
 
-    for (const story_id of Object.keys(id_to_update_vals)) {
-        const vals = id_to_update_vals[story_id];
-        console.log(story_id, vals);
-        story_updates.push(Story.findByIdAndUpdate(
-            story_id,
+    for (const storyId of Object.keys(idToUpdateVals)) {
+        const vals = idToUpdateVals[storyId];
+        console.log(storyId, vals);
+        storyUpdates.push(Story.findByIdAndUpdate(
+            storyId,
             { $inc: { voteSum: vals.total, voteCount: vals.count }}
         ));
     }
 
-    await Promise.all(story_updates);
+    await Promise.all(storyUpdates);
     
     res.cookie('token', '', { httpOnly: true })
         .redirect("/");
