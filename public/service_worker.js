@@ -47,7 +47,6 @@ self.addEventListener('fetch', event => {
     if (dest in cache_first) {
         event.respondWith(
             caches.match(cache_first[dest]).then(response => {
-                    console.log(`couldnt find ${dest} in cache, calling network...`);
                     return response || fetch(cache_first[dest]);
             })
         )

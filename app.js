@@ -3,14 +3,27 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
 const indexRouter = require('./routes/index');
 const storyRouter = require('./routes/stories');
 const { logged_in, logged_out } = require('./utils')
 const users = require('./controllers/users');
+const massUpload = require('./controllers/massUpload');
 
 const app = express();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+      callback(null, "./public");
+  },
+  filename: (req, file, callback) => {
+      callback(null, 'userUploadedjson.json');
+  }
+});
+const upload = multer({
+  storage: storage
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,8 +49,12 @@ app.post('/login', users.login);
 
 app.get('/logout', (req, res) => res.cookie('token', '', { httpOnly: true }).redirect('/'));
 
+app.get('/massUpload', (req, res) => res.render('massUpload.ejs'));
+app.post('/massUpload', upload.single('jsonfile'), massUpload.massUpload);
+
 app.use('/', indexRouter);
 app.use('/stories', storyRouter);
+
 
 // catch 404 and forward to error handler
 app.use((req, res) => res.redirect('/'));

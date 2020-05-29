@@ -7,18 +7,16 @@
 </head>
 
 <body>
-    <!-- <a href="/login">Login</a> | -->
     <span id='navbar'>
         <a href="/">Home</a>
+        <a href="/massUpload">Mass JSON Upload</a>
     </span>
-    
-    <!-- <a href="/register">Register</a> | -->
-    
-    <!-- <a href="/upload">Upload New Story</a> -->
-
     <div>
         <h1> Upload Story </h1>
-        <!-- <div id="stories"></div> -->
+        <label>	
+            Title:	
+            <input id="storyTitle" type="text"/>	
+        </label>
         <label>	
             Story:	
             <input id="storyText" type="text"/>	
@@ -26,7 +24,7 @@
         <br>	
         <label>	
             Image:	
-            <input id="images" multiple type="file" accept="image/*" capture="camera"/>	
+            <input id="images" multiple type="file" accept="image/*"/>	
         </label>	
         <button id="uploadStory"> Submit </button>
     

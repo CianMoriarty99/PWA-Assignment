@@ -1,5 +1,5 @@
 const validUsername = (username) => {
-    return !!/^\w{8,64}$/.exec(username);
+    return !!/^\w{5,64}$/.exec(username);
 };
 
 const validPassword = (password) => {

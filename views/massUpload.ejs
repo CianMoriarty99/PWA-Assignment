@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>Upload Stories From JSON</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <span id='navbar'>
+    <a href="/">Home</a>
+    <a href="/massUpload">Mass JSON Upload</a>
+  </span>
+
+  <h1>Upload Stories From JSON</h1>
+
+  
+  <form method="POST" enctype="multipart/form-data">
+    <h1> Upload Default Data </h1>
+    <label>	
+        JSON Upload:	
+        <input type="file" id="jsonfile" name="jsonfile" accept="application/JSON"/>	
+    </label>	
+    <input type="submit" id="uploadStory" value="Submit">
+  </form>
+    
+  
+</body>
+
+<script src="/scripts/idb.js"></script>
+<script src="/scripts/database.js"></script>
+<script src="/scripts/common.js"></script>
+
+</html>

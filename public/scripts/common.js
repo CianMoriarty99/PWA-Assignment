@@ -10,13 +10,16 @@ const status = async (response) => {
     }
 }
 
-
 const generateStoryElement = (story) => {
     const result = document.createElement("div");
     result.classList.add('story');
 
     const author = document.createElement("p");
     author.innerText = story.author;
+
+
+    const title = document.createElement("p");
+    title.innerText = story.storyTitle;
 
     const message = document.createElement("p");
     message.innerText = story.storyText;
@@ -63,6 +66,7 @@ const generateStoryElement = (story) => {
 
 
     result.appendChild(author);
+    result.appendChild(title);
     result.appendChild(message);
     result.appendChild(images);
     result.appendChild(date);
@@ -202,10 +206,11 @@ window.addEventListener('load', async () => {
                 const logoutOption = document.createElement('a');
                 logoutOption.href = '/logout';
                 logoutOption.innerHTML = 'Logout';
-    
+
                 navbar.appendChild(myStories);
                 navbar.appendChild(usernameField);
                 navbar.appendChild(logoutOption);
+                
             }
             else {
                 const loginOption = document.createElement('a');

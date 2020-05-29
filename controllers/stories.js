@@ -13,6 +13,7 @@ exports.getStories = async (req, res) => {
         const uniqueAuthors = await Vote.distinct('author');
         const votePrefs = {};
 
+
         if (req.username) {
             uniqueAuthors.forEach(auth => {
                 let votesForAuthor = votes.filter(obj => obj.author == auth);
@@ -139,6 +140,7 @@ exports.upload = async (req, res) => {
             author: req.username,
             date: date,
             time: time,
+            storyTitle: userStory.storyTitle,
             storyText: userStory.storyText,
             storyImages: req.files.map(file => file.filename),
             voteCount: 0,
