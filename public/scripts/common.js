@@ -1,6 +1,10 @@
 const storiesDiv = document.getElementById('stories');
 const navbar = document.getElementById('navbar');
+const loadMoreButton = document.getElementById('loadMoreStories');
 let sortMode = "date";
+
+let displayed = 0;
+let stories_to_display = [];
 
 const status = async (response) => {
     if (response.status >= 200 && response.status < 300) {
@@ -64,7 +68,6 @@ const generateStoryElement = (story) => {
         voteButtons.appendChild(button);
     }
 
-
     result.appendChild(author);
     result.appendChild(title);
     result.appendChild(message);
@@ -97,14 +100,28 @@ const displayStories = (stories) => {
     storiesDiv.style.visibility = 'hidden';
     storiesDiv.innerHTML = '';
     sortStories(stories);
-    for (let story  of stories) {
-        const ele = generateStoryElement(story);
-        storiesDiv.appendChild(ele);
-        storiesDiv.appendChild(document.createElement("br"));
-    }
+
+    stories_to_display = stories;
+    displayed = 0;
+
+    displaySomeStories();
 
     storiesDiv.style.visibility = 'visible';
 }
+
+const displaySomeStories = () => {
+    const maxStories = stories_to_display.length;
+    const difference = maxStories - displayed;
+    const toDisplay = difference > 10 ? 10 : difference;
+    for (let i = 0; i < toDisplay; i++) {
+        const ele = generateStoryElement(stories_to_display[displayed + i]);
+        storiesDiv.appendChild(ele);
+        storiesDiv.appendChild(document.createElement("br"));
+    }
+    displayed += toDisplay;
+}
+
+loadMoreButton.addEventListener('click', displaySomeStories);
 
 const sortStories = stories => {
     if (sortMode == "date"){
