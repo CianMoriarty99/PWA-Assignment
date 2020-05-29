@@ -95,7 +95,7 @@ const storyExists = async (req, res, next) => {
         return;
     } 
     try {
-        const story = await Story.exists(id);
+        const story = await Story.findById(id);
         if (story) {
             req.id = id;
             req.story = story;
