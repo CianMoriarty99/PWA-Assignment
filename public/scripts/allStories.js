@@ -14,7 +14,6 @@ const getAllStories = () => {
         .then(status)
         .then(r => r.json())
         .then(async allStories => {
-            // await deleteAllStories();
             await Promise.all(allStories.map(saveStory));
             loadAllStories().then(displayStories);
         }).catch(console.log())

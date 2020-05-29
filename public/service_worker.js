@@ -62,6 +62,8 @@ self.addEventListener('fetch', event => {
                 })
         );
     }
+
+    // fetch by default
 });
 
 

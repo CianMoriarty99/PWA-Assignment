@@ -9,24 +9,29 @@ exports.getStories = async (req, res) => {
     try {
         const stories = await Story.find({});
         const votes = await Vote.find({});
-        const uniqueAuthors = await Vote.distinct('author');
 
+        const uniqueAuthors = await Vote.distinct('author');
         const votePrefs = {};
 
-        uniqueAuthors.forEach(auth => {
-            let votesForAuthor = votes.filter(obj => obj.author == auth);
-            let testArray = votesForAuthor.map(row => ({[row.storyId]: row.value}));
-
-            votePrefs[auth] = testArray;
-        })
+        if (req.username) {
+            uniqueAuthors.forEach(auth => {
+                let votesForAuthor = votes.filter(obj => obj.author == auth);
+                let authorVotes = votesForAuthor.map(row => ({[row.storyId]: row.value}));
+                votePrefs[auth] = authorVotes;
+            });
+        }
 
         const recommendedScores = {};
-        new Ranking().getRecommendScores(votePrefs, req.username, 'sim_pearson').forEach(row => recommendedScores[row.story] = row.score);
+        if (req.username) {
+            new Ranking()
+            .getRecommendScores(votePrefs, req.username, 'sim_pearson')
+            .forEach(row => recommendedScores[row.story] = row.score);
+        }
 
-        const fixedStories = stories.map(s => {
-            const result = s.clean();
-            result.deletable = (req.username && s.author == req.username);
-            result.recommendScore = recommendedScores[s.id] || 0;
+        const fixedStories = stories.map(story => {
+            const result = story.clean();
+            result.deletable = (req.username && story.author == req.username);
+            result.recommendScore = req.username ? (recommendedScores[story.id] || 0) : 1;
             return result;
         });
 

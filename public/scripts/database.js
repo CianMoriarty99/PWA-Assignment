@@ -47,8 +47,6 @@ const initDb = () => {
         if (!upgradeDb.objectStoreNames.contains(VOTE_TO_UPLOAD_STORE)) {
             upgradeDb.createObjectStore(VOTE_TO_UPLOAD_STORE, { keyPath: 'storyId', autoIncrement: true });
         }
-
-
     });
 }
 
