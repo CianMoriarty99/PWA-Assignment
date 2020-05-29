@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 
 const storyController = require('../controllers/stories');
-const { logged_in, optional_logged_in, owns_story, story_exists, valid_vote } = require('../utils')
+const { loggedIn: loggedIn, optionalLoggedIn, ownsStory, storyExists, validVote } = require('../utils')
 
 
 const storage = multer.diskStorage({
@@ -25,14 +25,14 @@ const upload = multer({
 
 const router = express.Router();
 
-router.get('/', optional_logged_in, storyController.getStories);
-router.delete('/', logged_in, owns_story, storyController.delete)
+router.get('/', optionalLoggedIn, storyController.getStories);
+router.delete('/', loggedIn, ownsStory, storyController.delete)
 
-router.get('/myStories', logged_in, storyController.myStories);
+router.get('/myStories', loggedIn, storyController.myStories);
 
-router.post('/', logged_in, upload.array('images', 3), storyController.upload);
+router.post('/', loggedIn, upload.array('images', 3), storyController.upload);
 
-router.post('/vote', logged_in, story_exists, valid_vote, storyController.vote);
+router.post('/vote', loggedIn, storyExists, validVote, storyController.vote);
 
 
 module.exports = router;

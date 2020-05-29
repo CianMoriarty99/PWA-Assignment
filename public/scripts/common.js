@@ -4,7 +4,9 @@ const loadMoreButton = document.getElementById('loadMoreStories');
 let sortMode = "date";
 
 let displayed = 0;
-let stories_to_display = [];
+let storiesToDisplay = [];
+
+let userUsername;
 
 const status = async (response) => {
     if (response.status >= 200 && response.status < 300) {
@@ -77,7 +79,7 @@ const generateStoryElement = (story) => {
     result.appendChild(score);
     result.appendChild(voteButtons);
 
-    if(story.deletable){
+    if(story.author == userUsername){
         const deleteButton = document.createElement("button");
         deleteButton.innerText = "Delete";
         deleteButton.addEventListener('click', () => {
@@ -101,7 +103,7 @@ const displayStories = (stories) => {
     storiesDiv.innerHTML = '';
     sortStories(stories);
 
-    stories_to_display = stories;
+    storiesToDisplay = stories;
     displayed = 0;
 
     displaySomeStories();
@@ -110,18 +112,18 @@ const displayStories = (stories) => {
 }
 
 const displaySomeStories = () => {
-    const maxStories = stories_to_display.length;
+    const maxStories = storiesToDisplay.length;
     const difference = maxStories - displayed;
     const toDisplay = difference > 10 ? 10 : difference;
     for (let i = 0; i < toDisplay; i++) {
-        const ele = generateStoryElement(stories_to_display[displayed + i]);
+        const ele = generateStoryElement(storiesToDisplay[displayed + i]);
         storiesDiv.appendChild(ele);
         storiesDiv.appendChild(document.createElement("br"));
     }
     displayed += toDisplay;
 }
 
-loadMoreButton.addEventListener('click', displaySomeStories);
+if (loadMoreButton) loadMoreButton.addEventListener('click', displaySomeStories);
 
 const sortStories = stories => {
     if (sortMode == "date"){
@@ -145,6 +147,8 @@ const sortStories = stories => {
 
 window.addEventListener('load', async () => {
     initDb();
+
+    userUsername = await getUsername();
 
     const li = fetch('li')
         .then(status)

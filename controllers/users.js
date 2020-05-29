@@ -16,7 +16,6 @@ exports.getUsername = (req, res) => {
 exports.login = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    console.log(username, password);
     const user = await User.verify(username, password);
     if (!user) {
         console.log('no pass match');
@@ -37,7 +36,7 @@ exports.register = async (req, res) => {
         return;
     }
 
-    const user = await User.findOne({ user_name : username });
+    const user = await User.findOne({ username : username });
     if (user) {
         console.log('username taken');
         res.status(401).send('username taken');
@@ -46,7 +45,7 @@ exports.register = async (req, res) => {
     try{
         const hashed = await bcrypt.hash(password, saltRounds);
         const user = User.create({ 
-            user_name: username, 
+            username: username, 
             password: hashed 
         });
         const token = jwt.sign({ username }, secret, {

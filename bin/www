@@ -34,8 +34,8 @@ server.on('listening', onListening);
 /**
  * Attach server to socket io
  */
-let socket_module = require('../socket.io/socket-io');
-let io = socket_module.io;
+let socketModule = require('../socket.io/socket-io');
+let io = socketModule.io;
 
 io.attach(server);
 

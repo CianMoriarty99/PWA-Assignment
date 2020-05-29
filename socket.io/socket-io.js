@@ -1,11 +1,7 @@
-const socket_io = require('socket.io');
-const io = socket_io();
+const socketIo = require('socket.io');
+const io = socketIo();
 
 let socketStuff = { io };
-
-// io.on('connection', (socket) => {
-//     console.log('New client connection');
-// });
 
 socketStuff.sendNewPostAlert = () => {
     io.sockets.emit('NewStoryPost', { msg: 'NewPost' });

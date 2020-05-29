@@ -13,7 +13,6 @@ exports.getStories = async (req, res) => {
         const uniqueAuthors = await Vote.distinct('author');
         const votePrefs = {};
 
-
         if (req.username) {
             uniqueAuthors.forEach(auth => {
                 let votesForAuthor = votes.filter(obj => obj.author == auth);
@@ -31,7 +30,6 @@ exports.getStories = async (req, res) => {
 
         const fixedStories = stories.map(story => {
             const result = story.clean();
-            result.deletable = (req.username && story.author == req.username);
             result.recommendScore = req.username ? (recommendedScores[story.id] || 0) : 1;
             return result;
         });
@@ -50,7 +48,6 @@ exports.myStories = async (req, res) => {
         console.log(stories);
         res.json(stories.map(s => {
             const result = s.clean();
-            result.deletable = true;
             return result;
         }));
     } catch (e){
